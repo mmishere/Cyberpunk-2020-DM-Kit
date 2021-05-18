@@ -17,46 +17,36 @@ bottom_frame = Frame(root)
 bottom_frame.pack(side=BOTTOM)
 
 
-
-
 characters_frame = Frame(root)
 gear_frame = Frame(root)
 weapons_frame = Frame(root)
 armor_frame = Frame(root)
 
-
-# This is bad but inputs don't seem to work for these functions, nor does putting the command in "command = " directly
 def characters_page():
     main_frame.pack_forget()
     left_frame.pack_forget()
     right_frame.pack_forget()
     characters_frame.pack()
-    label = Label(characters_frame, textvariable = top_text)
-    top_text.set("Characters not yet implemented!")
+    # label = Label(characters_frame, textvariable = top_text)
+    # top_text.set("Characters not yet implemented!")
 
 def gear_page():
     main_frame.pack_forget()
     left_frame.pack_forget()
     right_frame.pack_forget()
     gear_frame.pack()
-    label = Label(gear_frame, textvariable = top_text)
-    top_text.set("Gear not yet implemented!")
 
 def weapons_page():
     main_frame.pack_forget()
     left_frame.pack_forget()
     right_frame.pack_forget()
     weapons_frame.pack()
-    label = Label(weapons_frame, textvariable = top_text)
-    top_text.set("Weapons not yet implemented!")
 
 def armor_page():
     main_frame.pack_forget()
     left_frame.pack_forget()
     right_frame.pack_forget()
     armor_frame.pack()
-    label = Label(armor_frame, textvariable = top_text)
-    top_text.set("Armor not yet implemented!")
 
 def characters_back():
     characters_frame.pack_forget()
