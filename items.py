@@ -76,6 +76,7 @@ db.connect()
 
 
 # for g in Gear.select():
+    # print(g.type)
     # if (g.cost == "-1.0"):
     # if (g.notes != ""):
     #     print(str(g.id) + " | " + g.cost + " | " + g.notes)
@@ -86,8 +87,8 @@ db.connect()
     # new_item = Gear2TheSequel.create(name=g.name, cost=str(g.cost), description=g.description, type=g.type, notes=g.notes)
     # new_item.save()
 
-# make sure to check all types afterwards for consistency
 
+# For me to input items with:
 # while True:
 #     # run through and add in items
 #     item_type = input("g, w, a, stop: ")
