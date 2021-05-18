@@ -8,6 +8,7 @@ class Character:
             self.armor = armor_values
         else:
             self.armor = character_armor.Character_Armor()
+        
         if stat_values:
             self.stats = stat_values
         else:
