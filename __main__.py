@@ -1,128 +1,82 @@
 from character import * # comes with character_armor and character_stats
 from items import *
+from menu_functions import *
 
 from tkinter import *
 
+
+default_font = 'Courier New'
 root = Tk()
-root.geometry("300x300")
+root.geometry("900x600")
+root.configure(bg = 'black')
 root.iconbitmap("icon.ico")
 main_frame = Frame(root)
 main_frame.pack()
 
-left_frame = Frame(root)
-left_frame.pack(side=LEFT)
-right_frame = Frame(root)
-right_frame.pack(side=RIGHT)
-bottom_frame = Frame(root)
-bottom_frame.pack(side=BOTTOM)
-
-
-characters_frame = Frame(root)
-gear_frame = Frame(root)
-weapons_frame = Frame(root)
-armor_frame = Frame(root)
-
-def characters_page():
-    main_frame.pack_forget()
-    left_frame.pack_forget()
-    right_frame.pack_forget()
-    characters_frame.pack()
-    # label = Label(characters_frame, textvariable = top_text)
-    # top_text.set("Characters not yet implemented!")
-
-def gear_page():
-    main_frame.pack_forget()
-    left_frame.pack_forget()
-    right_frame.pack_forget()
-    gear_frame.pack()
-
-def weapons_page():
-    main_frame.pack_forget()
-    left_frame.pack_forget()
-    right_frame.pack_forget()
-    weapons_frame.pack()
-
-def armor_page():
-    main_frame.pack_forget()
-    left_frame.pack_forget()
-    right_frame.pack_forget()
-    armor_frame.pack()
-
-def characters_back():
-    characters_frame.pack_forget()
-    main_frame.pack()
-    left_frame.pack()
-    right_frame.pack()
-    
-def gear_back():
-    gear_frame.pack_forget()
-    main_frame.pack()
-    left_frame.pack()
-    right_frame.pack()
-
-def weapons_back():
-    weapons_frame.pack_forget()
-    main_frame.pack()
-    left_frame.pack()
-    right_frame.pack()
-
-def armor_back():
-    armor_frame.pack_forget()
-    main_frame.pack()
-    left_frame.pack()
-    right_frame.pack()
-
-
 top_text = StringVar()
 top_text.set("Main Page")
 main_label = Label(main_frame, textvariable = top_text)
+main_label.configure(bg = 'black', fg = 'red', font = (default_font, 16))
 main_label.pack()
 
-characters_text = StringVar()
-characters_text.set("Characters not yet implemented!")
-characters_label = Label(characters_frame, textvariable = characters_text)
-characters_label.pack()
+# Setting the background and foreground here will only work for Linux users - I'm not entirely sure if it will, as I don't have Linux.
+menu_bar = Menu(main_frame, bg = 'black', fg = 'white')
+menu_bar.add_command(label = "Main Page", command = main_tab)
 
-gear_text = StringVar()
-gear_text.set("Gear not yet implemented!")
-gear_label = Label(gear_frame, textvariable = gear_text)
-gear_label.pack()
+character_menu = Menu(menu_bar, tearoff = 0)
+character_menu.add_command(label = "All", command = all_characters)
+character_menu.add_command(label = "Players", command = players)
+character_menu.add_command(label = "NPCs", command = npcs)
+menu_bar.add_cascade(label = "Characters", menu = character_menu)
 
-weapons_text = StringVar()
-weapons_text.set("Weapons not yet implemented!")
-weapons_label = Label(weapons_frame, textvariable = weapons_text)
-weapons_label.pack()
+gear_menu = Menu(menu_bar, tearoff = 0)
+gear_menu.add_command(label = "All", command = all_gear)
+gear_menu.add_command(label = "Fashion", command = fashion)
+gear_menu.add_command(label = "Personal Electronics", command = personal_electronics)
+gear_menu.add_command(label = "Data Systems", command = data_systems)
+gear_menu.add_command(label = "Communications", command = communications)
+gear_menu.add_command(label = "Surveillance", command = surveillance)
+gear_menu.add_command(label = "Entertainment", command = entertainment)
+gear_menu.add_command(label = "Security", command = security)
+gear_menu.add_command(label = "Medical", command = medical)
+gear_menu.add_command(label = "Furnishings", command = furnishings)
+gear_menu.add_command(label = "Vehicles", command = vehicles)
+gear_menu.add_command(label = "Lifestyle", command = lifestyle)
+gear_menu.add_command(label = "Groceries", command = groceries)
+gear_menu.add_command(label = "Housing", command = housing)
+gear_menu.add_command(label = "Miscellaneous", command = miscellaneous_gear)
+# misc is for player-added items with no type
+menu_bar.add_cascade(label = "Gear", menu = gear_menu)
 
-armor_text = StringVar()
-armor_text.set("Characters not yet implemented!")
-armor_label = Label(armor_frame, textvariable = armor_text)
-armor_label.pack()
+
+weapons_menu = Menu(menu_bar, tearoff = 0)
+weapons_menu.add_command(label = "All", command = all_weapons)
+weapons_menu.add_command(label = "Pistols", command = pistols)
+weapons_menu.add_command(label = "SMGs", command = smgs)
+weapons_menu.add_command(label = "Shotguns", command = shotguns)
+weapons_menu.add_command(label = "Rifles", command = rifles)
+weapons_menu.add_command(label = "Heavy Weapons", command = heavy_weapons)
+weapons_menu.add_command(label = "Melee", command = melee)
+weapons_menu.add_command(label = "Exotic", command = exotic)
+weapons_menu.add_command(label = "Miscellaneous", command = miscellaneous_weapons)
+# misc is for player-added items with no type
+menu_bar.add_cascade(label = "Weapons", menu = weapons_menu)
+
+armor_menu = Menu(menu_bar, tearoff = 0)
+armor_menu.add_command(label = "All", command = all_armor)
+menu_bar.add_cascade(label = "Armor", menu = armor_menu)
 
 
-character_button = Button(left_frame, text = "Characters", command = characters_page)
-character_button.pack(padx = 4, pady = 3)
+options_menu = Menu(menu_bar, tearoff = 0)
+options_menu.add_command(label = "Full Screen", command = full_screen)
+options_menu.add_command(label = "Windowed", command = windowed)
+options_menu.add_command(label = "Light Mode", command = light_mode)
+options_menu.add_command(label = "Dark Mode", command = dark_mode)
+# misc is for player-added items with no type
+menu_bar.add_cascade(label = "Options", menu = options_menu)
+# options: full screen, windowed, light mode, dark mode
 
-gear_button = Button(right_frame, text = "Gear", command = gear_page)
-gear_button.pack(padx = 5, pady = 5)
-
-weapons_button = Button(right_frame, text = "Weapons", command = weapons_page)
-weapons_button.pack(padx = 5, pady = 5)
-
-armor_button = Button(right_frame, text = "Armor", command = armor_page)
-armor_button.pack(padx = 10, pady = 5)
-
-c_back = Button(characters_frame, text = "Back to main page", command = characters_back)
-c_back.pack(padx = 0, pady = 0)
-
-g_back = Button(gear_frame, text = "Back to main page", command = gear_back)
-g_back.pack(padx = 0, pady = 0)
-
-w_back = Button(weapons_frame, text = "Back to main page", command = weapons_back)
-w_back.pack(padx = 0, pady = 0)
-
-a_back = Button(armor_frame, text = "Back to main page", command = armor_back)
-a_back.pack(padx = 0, pady = 0)
-
+root.config(menu = menu_bar)
 
 root.title("Cyberpunk 2020 DM Kit")
 root.mainloop()
