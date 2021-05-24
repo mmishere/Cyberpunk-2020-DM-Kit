@@ -6,15 +6,15 @@ from items import BodyParts, Armor, Gear, Weapon
 class Character:
     # eb is a number, armor is a dict from strings to Armor, cyberware is a list, gear is a list
     def __init__(self, eb, head_armor, torso_armor, r_arm_armor, l_arm_armor, r_leg_armor, l_leg_armor, cyberware, gear, armor_values, stat_values):
-        if armor_values:
-            self.armor = armor_values
-        else:
-            self.armor = Character_Armor()
+        # if armor_values:
+        #     self.armor = armor_values
+        # else:
+        #     self.armor = Character_Armor()
         
         if stat_values:
             self.stats = stat_values
         else:
-            self.stats = Character_Stats()
+            self.stats = Character_Stats(0, 0, 0, 0, 0, 0, 0, 0, 0)
         
         # what if someone has more than one piece of armor on a given part? could make that a list i guess, i dunno
         self.armor = {
@@ -133,5 +133,5 @@ def damage(character, is_armor_piercing, damage_amt, body_location):
     # alter armor sp if damage gets through, look into the rules for that
 
 sample_stats = Character_Stats(10, 10, 5, 3, 5, 6, 9, 4, 6)
-moi = Character(0, 0, 0, 0, 0, 0, 0, None, None, None, sample_stats)
+moi = Character(0, 0, 0, 0, 0, 0, 0, None, None, None, None)
 stats_to_string(moi)
