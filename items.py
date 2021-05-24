@@ -9,15 +9,17 @@ class Gear(Model):
     name = CharField()
     cost = TextField()
     description = TextField()
-    type = CharField()
+    # CHANGED FROM TYPE
+    category = CharField()
     notes = TextField()
     class Meta:
         database = db
 
 class Weapon(Model):
     name = CharField()
-    cost = FloatField()
-    type = CharField() # e.g. melee, pistol
+    cost = TextField()
+    # CHANGED FROM TYPE
+    category = CharField() # e.g. melee, pistol
     weapon_accuracy = IntegerField()
     concealability = CharField()
     availability = CharField()
@@ -28,6 +30,16 @@ class Weapon(Model):
     # the following apply to both melee and distance
     range = CharField() # str because "throw" is a valid range, not just numbers
     notes = TextField() # extra info, may be empty
+
+    class Meta:
+        database = db
+
+class Cyberware(Model):
+    name = CharField()
+    cost = TextField()
+    category = CharField()
+    description = TextField()
+    body_part = CharField()
 
     class Meta:
         database = db
@@ -48,15 +60,13 @@ class Armor(Model):
 
 db.connect()
 
-# alter_column_type(Gear, cost, cost)
-
-
 # all of these are already done
 # Gear.create_table()
 # Weapon.create_table()
+# Armor.create_table()
 
 # Armor.drop_table()
-# Armor.create_table()
+
 
 
 # Deleting an item:

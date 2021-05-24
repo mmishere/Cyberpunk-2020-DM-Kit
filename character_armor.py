@@ -1,4 +1,9 @@
 class Character_Armor:
+    # first, make an armor piece
+    # then, apply it to the character
+
+    # this is only really relevant if you want to make an NPC or something without worrying about specific items; in other words, default armor
+
     # takes in ints
     def __init__(self, h = None, t = None, ra = None, la = None, rl = None, ll = None):
         # either take in all or none
