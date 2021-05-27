@@ -4,8 +4,7 @@ class Character_Armor:
 
     # this is only really relevant if you want to make an NPC or something without worrying about specific items; in other words, default armor
 
-    # takes in ints
-    def __init__(self, h = None, t = None, ra = None, la = None, rl = None, ll = None):
+    def __init__(self, h: int = None, t: int = None, ra: int = None, la: int = None, rl: int = None, ll: int = None):
         # either take in all or none
         if (not h and not t and not ra and not la and not rl and not ll):
             self.head = 0
@@ -26,7 +25,7 @@ class Character_Armor:
             print("Input all values or no values; can't only have some")
     
     # takes in ints
-    def set_armor_values(self, h, t, ra, la, rl, ll):
+    def set_armor_values(self, h: int, t: int, ra: int, la: int, rl: int, ll: int):
         if (h < 0 or t < 0 or ra < 0 or la < 0 or rl < 0 or ll < 0):
             print("An armor SP value was less than 0. Invalid input, please try again.")
             return False

@@ -158,7 +158,7 @@ def add_gear():
     gear = Gear.create(name=x_name, cost=x_cost, description=x_descr, type=x_type, notes=x_notes)
     gear.save()
 
-def remove_gear(name):
+def remove_gear(name: str):
     gear = Gear.get(Gear.name == name)
     gear.delete_instance()
 
@@ -185,7 +185,7 @@ def add_weapon():
     weapon = Weapon(name=w_name, cost=w_cost, type=w_type, weapon_accuracy = w_wa, concealability=w_conc, damage=w_dmg, rate_of_fire=w_rof, range=w_range, notes=w_notes)
     weapon.save()
 
-def remove_weapon(name):
+def remove_weapon(name: str):
     weapon = Weapon.get(Weapon.name == name)
     weapon.delete_instance()
 

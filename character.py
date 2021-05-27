@@ -4,8 +4,8 @@ from items import BodyParts, Armor, Gear, Weapon
 
 # also need to track lifepath, inventory, descriptions, affectations, etc.
 class Character:
-    # eb is a number, armor is a dict from strings to Armor, cyberware is a list, gear is a list
-    def __init__(self, name, eb, head_armor, torso_armor, r_arm_armor, l_arm_armor, r_leg_armor, l_leg_armor, cyberware, gear, stat_values):
+    # add types to cyberware and gear once that's figured out
+    def __init__(self, name: str, eb: float, head_armor: Armor, torso_armor: Armor, r_arm_armor: Armor, l_arm_armor: Armor, r_leg_armor: Armor, l_leg_armor: Armor, cyberware, gear, stat_values: Character_Stats):
         self.name = name
         self.eb = eb
         self.cyberware = cyberware
@@ -61,7 +61,7 @@ class Character:
         self.stats.set_stat_values(INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP)
 
 class NPC:
-    def __init__(self, armor_values = None, stat_values = None):
+    def __init__(self, armor_values: Character_Armor = None, stat_values: Character_Stats = None):
         if armor_values:
             self.armor = armor_values
         else:
@@ -73,7 +73,7 @@ class NPC:
             self.stats = Character_Stats()
 
 
-def stats_to_string(character):
+def stats_to_string(character: Character):
     # this looks a bit off if there are any two-digit stat values
     print("STATS for " + character.name + ":")
     print("  INT  [" + str(character.stats.INT) + "]  REF [" + str(character.stats.REF) + "] TECH [" + str(character.stats.TECH) + "] COOL [" + str(character.stats.COOL) + "]")
@@ -84,10 +84,10 @@ def stats_to_string(character):
     print("  Lift [" + str(character.stats.lift) + "kgs / " + str(int(character.stats.lift * 2.20462)) + "lbs]" + "  Carry [" + str(character.stats.carry) + "kgs / " + str(int(character.stats.carry * 2.20462)) + "lbs]")
     print("  SAVE [" + str(character.stats.SAVE) + "] BTM [" + str(character.stats.BTM) + "]")
 
-def armor_to_string(character):
+def armor_to_string(character: Character):
     pass
 
-def damage(character, damage_amt, body_location, is_armor_piercing):
+def damage(character: Character, damage_amt: int, body_location: str, is_armor_piercing: bool):
     assert body_location == "head" or body_location == "torso" or body_location == "r_arm" or body_location == "l_arm" or body_location == "r_leg" or body_location == "l_leg"
     relevant_armor = character.armor[body_location]
     effective_sp = character.intrinsic_armor[body_location]

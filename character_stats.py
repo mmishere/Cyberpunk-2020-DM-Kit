@@ -1,5 +1,5 @@
 class Character_Stats:
-    def __init__(self, i, r, t, c, a, l, m, b, e):
+    def __init__(self, i: int, r: int, t: int, c: int, a: int, l: int, m: int, b: int, e: int):
         if (i == None or r == None or t == None or c == None or a == None or l == None or m == None or b == None or e == None):
             print("All values must be inputted! INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP.")
             return
@@ -69,7 +69,7 @@ class Character_Stats:
             self.BTM = -5
 
     # set_stat_values is a copy of __init__(), so the code is mostly the same; if you change something above, change it here as well
-    def set_stat_values(self, i, r, t, c, a, l, m, b, e):
+    def set_stat_values(self, i: int, r: int, t: int, c: int, a: int, l: int, m: int, b: int, e: int):
         if (not i or not r or not t or not c or not a or not l or not m or not b or not e):
             print("All values must be inputted! INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP.")
             return
