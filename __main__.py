@@ -10,55 +10,55 @@ import menu_functions
 
 courier_new = 'Courier New'
 
+options_br = {'bg': 'black', 'fg': 'red'} # black red
+options_bw = {'bg': 'black', 'fg': 'white'} # black white
+options_bb = {'bg': 'black', 'fg': 'black'} # black black
 
 class MainFrame(Frame):
-    def __init__(self, container):
+    def __init__(self, container, controller):
         super().__init__(container)
+        self.controller = controller
 
         self.configure(bg = 'black')
-        self.label = Label(self, bg = 'black', fg = 'red', text = 'Main Page', font = (courier_new, 16))
+        self.label = Label(self, **options_br, text = 'Main Page', font = (courier_new, 16))
         self.label.pack(padx = 10, pady = 5)
 
-        self.pack()
-
-
 class NewCharacterFrame(Frame):
-    def __init__(self, container):
+    def __init__(self, container, controller):
         super().__init__(container)
+        self.controller = controller
+
         self.top_label = Label(self, text = "New Character")
-        self.top_label.configure(bg = 'black', fg = 'red', font = (courier_new, 16))
+        self.top_label.configure(**options_br, font = (courier_new, 16))
         self.top_label.pack()
 
-        self.handle = Entry(self, bg = 'black', fg = 'white', width = 0, font = (courier_new, 12))
+        self.handle = Entry(self, **options_bw, width = 0, font = (courier_new, 12))
         self.handle.insert(0, 'Enter Handle')
         self.handle.pack()
-        self.role = Entry(self, bg = 'black', fg = 'white', width = 0, font = (courier_new, 12))
+        self.role = Entry(self, **options_bw, width = 0, font = (courier_new, 12))
         self.role.insert(0, 'Enter Role')
         self.role.pack()
         self.npc_str = IntVar(value=True)
-        self.chara = Radiobutton(self, bg = 'black', fg = 'black', text = "Player character", font = (courier_new, 12), variable = self.npc_str, value = False)
+        self.chara = Radiobutton(self, **options_bb, text = "Player character", font = (courier_new, 12), variable = self.npc_str, value = False)
         self.chara.pack()
-        self.npc = Radiobutton(self, bg = 'black', fg = 'black', text = "NPC", font = (courier_new, 12), variable = self.npc_str, value = True)
+        self.npc = Radiobutton(self, **options_bb, text = "NPC", font = (courier_new, 12), variable = self.npc_str, value = True)
         self.npc.pack()
-        self.enter_character = Button(self, bg = 'black', fg = 'white', text = "Create character", font = (courier_new, 12), command = self.create_character)
+        self.enter_character = Button(self, **options_bw, text = "Create character", font = (courier_new, 12), command = self.create_character)
         self.enter_character.pack()
+
     def create_character():
-            h = handle.get()
-            n = npc_str.get()
-            r = role.get()
-            print(h, n, r)
+        h = handle.get()
+        n = npc_str.get()
+        r = role.get()
+        print(h, n, r)
 
 class Frame2(Frame):
-    def __init__(self, container):
+    def __init__(self, container, controller):
         super().__init__(container)
-
-        # use controller to access show_frame function from root
-
+        self.controller = controller
         self.configure(bg = 'black')
-        self.label = Label(self, bg = 'black', fg = 'red', text = 'Test', font = (courier_new, 16))
+        self.label = Label(self, **options_br, text = 'Test', font = (courier_new, 16))
         self.label.pack(padx = 10, pady = 5)
-
-        self.pack()
 
 class App(Tk):
     def __init__(self):
@@ -71,22 +71,22 @@ class App(Tk):
         container = Frame(self)
         self.frames = {}
         for fr in (MainFrame, NewCharacterFrame, Frame2):
-            frame = fr(container)
-            self.frames[fr] = frame
-            # mainframe.grid(row = 0, column = 0, sticky = 'nsew') # edit this later
+            frame_name = fr.__name__
+            frame = fr(container, self)
+            self.frames[frame_name] = frame
+            frame.pack()
+            # frame.grid(row = 0, column = 0, sticky = "nsew") # packing is done here
+        
+        self.show_frame("MainFrame")
 
         # Setting the background and foreground here will only work for Linux users - I'm not entirely sure if it will, as I don't have Linux.
-        self.menu_bar = Menu(self, bg = 'black', fg = 'white')
+        self.menu_bar = Menu(self, **options_bw)
 
         # i tried to abstract this bit into a function and it didn't work, so :')
-        self.menu_bar.add_command(label = "Main Page", command = main_tab)
+        self.menu_bar.add_command(label = "Main Page", command = lambda: self.show_frame("MainFrame"))
         character_menu = Menu(self.menu_bar, tearoff = 0)
         character_menu.add_command(label = "All", command = all_characters)
-        # def new_character():
-        #     # this would break if it's not the main frame
-        #     main_frame.pack_forget()
-        #     new_characters_frame.pack()
-        character_menu.add_command(label = "New Character", command = new_character)
+        character_menu.add_command(label = "New Character", command = lambda: self.show_frame("NewCharacterFrame"))
         character_menu.add_command(label = "NPCs", command = npcs)
         character_menu.add_command(label = "Players", command = players)
 
@@ -142,14 +142,13 @@ class App(Tk):
         # options: full screen, windowed, light mode, dark mode
 
         self.configure(menu = self.menu_bar)
-
-        self.show_frame(MainFrame)
     
-    def show_frame(self, cont):
-        frame = self.frames[cont]
+    def show_frame(self, to_show):
+        print("showing frame")
+        frame = self.frames[to_show]
         frame.tkraise()
 
 # if __name__ == '__main__':
 app = App()
-frame = MainFrame(app)
+frame = MainFrame(Frame(app), app)
 app.mainloop()
