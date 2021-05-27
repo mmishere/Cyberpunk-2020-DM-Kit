@@ -1,12 +1,8 @@
 from character import * # comes with character_armor and character_stats
 from items import *
-from menu_functions import *
+from menu_placeholders import * # remove this later once all frames are set up
 
 from tkinter import *
-
-# will probably remove this later
-import menu_functions
-
 
 courier_new = 'Courier New'
 
@@ -15,18 +11,18 @@ options_bw = {'bg': 'black', 'fg': 'white'} # black white
 options_bb = {'bg': 'black', 'fg': 'black'} # black black
 
 class MainFrame(Frame):
-    def __init__(self, container, controller):
+    def __init__(self, container):
         super().__init__(container)
-        self.controller = controller
 
         self.configure(bg = 'black')
-        self.label = Label(self, **options_br, text = 'Main Page', font = (courier_new, 16))
+        self.label = Label(self, **options_br, text = 'Main Menu', font = (courier_new, 16))
         self.label.pack(padx = 10, pady = 5)
 
 class NewCharacterFrame(Frame):
-    def __init__(self, container, controller):
+    def __init__(self, container):
         super().__init__(container)
-        self.controller = controller
+
+        self.configure(bg = 'black')
 
         self.top_label = Label(self, text = "New Character")
         self.top_label.configure(**options_br, font = (courier_new, 16))
@@ -38,10 +34,10 @@ class NewCharacterFrame(Frame):
         self.role = Entry(self, **options_bw, width = 0, font = (courier_new, 12))
         self.role.insert(0, 'Enter Role')
         self.role.pack()
-        self.npc_str = IntVar(value=True)
-        self.chara = Radiobutton(self, **options_bb, text = "Player character", font = (courier_new, 12), variable = self.npc_str, value = False)
+        self.npc_str = IntVar(self, value=True)
+        self.chara = Radiobutton(self, **options_bw, text = "Player character", font = (courier_new, 12), variable = self.npc_str, value = False)
         self.chara.pack()
-        self.npc = Radiobutton(self, **options_bb, text = "NPC", font = (courier_new, 12), variable = self.npc_str, value = True)
+        self.npc = Radiobutton(self, **options_bw, text = "NPC", font = (courier_new, 12), variable = self.npc_str, value = True)
         self.npc.pack()
         self.enter_character = Button(self, **options_bw, text = "Create character", font = (courier_new, 12), command = self.create_character)
         self.enter_character.pack()
@@ -52,14 +48,6 @@ class NewCharacterFrame(Frame):
         r = role.get()
         print(h, n, r)
 
-class Frame2(Frame):
-    def __init__(self, container, controller):
-        super().__init__(container)
-        self.controller = controller
-        self.configure(bg = 'black')
-        self.label = Label(self, **options_br, text = 'Test', font = (courier_new, 16))
-        self.label.pack(padx = 10, pady = 5)
-
 class App(Tk):
     def __init__(self):
         super().__init__()
@@ -68,67 +56,69 @@ class App(Tk):
         self.configure(bg = 'black')
         self.iconbitmap('icon.ico')
 
-        container = Frame(self)
         self.frames = {}
-        for fr in (MainFrame, NewCharacterFrame, Frame2):
-            frame_name = fr.__name__
-            frame = fr(container, self)
-            self.frames[frame_name] = frame
+        for fr in (MainFrame, NewCharacterFrame):
+            # commented out string-based frames:
+            # frame_name = fr.__name__
+            # frame = fr(container, self)
+            # self.frames[frame_name] = frame
+            # frame.pack()
+            frame = fr(self)
+            self.frames[fr] = frame
             frame.pack()
             # frame.grid(row = 0, column = 0, sticky = "nsew") # packing is done here
         
-        self.show_frame("MainFrame")
+        self.show_frame(MainFrame)
 
-        # Setting the background and foreground here will only work for Linux users - I'm not entirely sure if it will, as I don't have Linux.
-        self.menu_bar = Menu(self, **options_bw)
 
+        self.menu_bar = Menu(self)
+        
         # i tried to abstract this bit into a function and it didn't work, so :')
-        self.menu_bar.add_command(label = "Main Page", command = lambda: self.show_frame("MainFrame"))
+        self.menu_bar.add_command(label = "Main Menu", command = lambda: self.show_frame(MainFrame))
         character_menu = Menu(self.menu_bar, tearoff = 0)
-        character_menu.add_command(label = "All", command = all_characters)
-        character_menu.add_command(label = "New Character", command = lambda: self.show_frame("NewCharacterFrame"))
-        character_menu.add_command(label = "NPCs", command = npcs)
-        character_menu.add_command(label = "Players", command = players)
+        character_menu.add_command(label = "All", command = self.show_frame(AllCharactersFrame))
+        character_menu.add_command(label = "New Character", command = lambda: self.show_frame(NewCharacterFrame))
+        character_menu.add_command(label = "NPCs", command = self.show_frame(NPCsFrame))
+        character_menu.add_command(label = "Players", command = self.show_frame(PlayersFrame))
 
         self.menu_bar.add_cascade(label = "Characters", menu = character_menu)
 
         gear_menu = Menu(self.menu_bar, tearoff = 0)
-        gear_menu.add_command(label = "All", command = all_gear)
-        gear_menu.add_command(label = "Communications", command = communications)
-        gear_menu.add_command(label = "Data Systems", command = data_systems)
-        gear_menu.add_command(label = "Entertainment", command = entertainment)
-        gear_menu.add_command(label = "Fashion", command = fashion)
-        gear_menu.add_command(label = "Furnishings", command = furnishings)
-        gear_menu.add_command(label = "Groceries", command = groceries)
-        gear_menu.add_command(label = "Housing", command = housing)
-        gear_menu.add_command(label = "Lifestyle", command = lifestyle)
-        gear_menu.add_command(label = "Medical", command = medical)
-        gear_menu.add_command(label = "Miscellaneous", command = miscellaneous_gear)
-        gear_menu.add_command(label = "Personal Electronics", command = personal_electronics)
-        gear_menu.add_command(label = "Security", command = security)
-        gear_menu.add_command(label = "Surveillance", command = surveillance)
-        gear_menu.add_command(label = "Vehicles", command = vehicles)
-        # misc is for player-added items with no type
+        gear_menu.add_command(label = "All", command = self.show_frame(AllGearFrame))
+        gear_menu.add_command(label = "Communications", command = self.show_frame(CommunicationsFrame))
+        gear_menu.add_command(label = "Data Systems", command = self.show_frame(DataSystemsFrame))
+        gear_menu.add_command(label = "Entertainment", command = self.show_frame(EntertainmentFrame))
+        gear_menu.add_command(label = "Fashion", command = self.show_frame(FashionFrame))
+        gear_menu.add_command(label = "Furnishings", command = self.show_frame(FurnishingsFrame))
+        gear_menu.add_command(label = "Groceries", command = self.show_frame(GroceriesFrame))
+        gear_menu.add_command(label = "Housing", command = self.show_frame(HousingFrame))
+        gear_menu.add_command(label = "Lifestyle", command = self.show_frame(LifestyleFrame))
+        gear_menu.add_command(label = "Medical", command = self.show_frame(MedicalFrame))
+        gear_menu.add_command(label = "Miscellaneous", command = self.show_frame(MiscGearFrame)) # for player-added items with no type
+        gear_menu.add_command(label = "Personal Electronics", command = self.show_frame(PersonalElectronicsFrame))
+        gear_menu.add_command(label = "Security", command = self.show_frame(SecurityFrame))
+        gear_menu.add_command(label = "Surveillance", command = self.show_frame(SurveillanceFrame))
+        gear_menu.add_command(label = "Vehicles", command = self.show_frame(VehiclesFrame))
         self.menu_bar.add_cascade(label = "Gear", menu = gear_menu)
 
 
         weapons_menu = Menu(self.menu_bar, tearoff = 0)
-        weapons_menu.add_command(label = "All", command = all_weapons)
-        weapons_menu.add_command(label = "Exotic", command = exotic)
-        weapons_menu.add_command(label = "Heavy Weapons", command = heavy_weapons)
-        weapons_menu.add_command(label = "Melee", command = melee)
-        weapons_menu.add_command(label = "Miscellaneous", command = miscellaneous_weapons)
-        weapons_menu.add_command(label = "Pistols", command = pistols)
-        weapons_menu.add_command(label = "Rifles", command = rifles)
-        weapons_menu.add_command(label = "Shotguns", command = shotguns)
-        weapons_menu.add_command(label = "SMGs", command = smgs)
+        weapons_menu.add_command(label = "All", command = self.show_frame(AllWeaponsFrame))
+        weapons_menu.add_command(label = "Exotics", command = self.show_frame(ExoticsFrame))
+        weapons_menu.add_command(label = "Heavy Weapons", command = self.show_frame(HeavyWeaponsFrame))
+        weapons_menu.add_command(label = "Melee", command = self.show_frame(MeleeFrame))
+        weapons_menu.add_command(label = "Miscellaneous", command = self.show_frame(MiscWeaponsFrame))  # for player-added items with no type
+        weapons_menu.add_command(label = "Pistols", command = self.show_frame(PistolsFrame))
+        weapons_menu.add_command(label = "Rifles", command = self.show_frame(RiflesFrame))
+        weapons_menu.add_command(label = "Shotguns", command = self.show_frame(ShotgunsFrame))
+        weapons_menu.add_command(label = "SMGs", command = self.show_frame(SMGsFrame))
 
 
         # misc is for player-added items with no type
         self.menu_bar.add_cascade(label = "Weapons", menu = weapons_menu)
 
         armor_menu = Menu(self.menu_bar, tearoff = 0)
-        armor_menu.add_command(label = "All", command = all_armor)
+        armor_menu.add_command(label = "All", command = self.show_frame(AllArmorFrame))
         self.menu_bar.add_cascade(label = "Armor", menu = armor_menu)
 
 
@@ -144,11 +134,14 @@ class App(Tk):
         self.configure(menu = self.menu_bar)
     
     def show_frame(self, to_show):
-        print("showing frame")
-        frame = self.frames[to_show]
-        frame.tkraise()
+        try:
+            print("showing frame: " + to_show.__name__)
+            frame = self.frames[to_show]
+            frame.tkraise()
+        except:
+            print(to_show)
 
-# if __name__ == '__main__':
-app = App()
-frame = MainFrame(Frame(app), app)
-app.mainloop()
+if __name__ == '__main__':
+    app = App()
+    frame = MainFrame(app)
+    app.mainloop()
