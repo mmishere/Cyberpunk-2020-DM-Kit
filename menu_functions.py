@@ -4,6 +4,9 @@ def main_tab():
 def all_characters():
     pass
 
+def new_character():
+    pass
+
 def players():
     pass
 

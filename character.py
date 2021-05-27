@@ -5,12 +5,14 @@ from items import BodyParts, Armor, Gear, Weapon
 # also need to track lifepath, inventory, descriptions, affectations, etc.
 class Character:
     # add types to cyberware and gear once that's figured out
-    def __init__(self, name: str, eb: float, head_armor: Armor, torso_armor: Armor, r_arm_armor: Armor, l_arm_armor: Armor, r_leg_armor: Armor, l_leg_armor: Armor, cyberware, gear, stat_values: Character_Stats):
+    def __init__(self, npc: bool, name: str, eb: float, head_armor: Armor, torso_armor: Armor, r_arm_armor: Armor, l_arm_armor: Armor, r_leg_armor: Armor, l_leg_armor: Armor, cyberware, gear, stat_values: Character_Stats):
         self.name = name
         self.eb = eb
         self.cyberware = cyberware
         self.gear = gear
         self.hp = 40
+        self.is_npc = npc
+
 
         # setting these now so i don't forget them later; relevant if cyberware increases SP, like Skinweave
         self.intrinsic_armor = {
@@ -130,7 +132,7 @@ def damage(character: Character, damage_amt: int, body_location: str, is_armor_p
     # show character.hp in an easily viewable interface that updates when damage is taken
     # alter armor sp if damage gets through, look into the rules for that
 
-sample_stats = Character_Stats(10, 10, 5, 3, 5, 6, 9, 4, 6)
-bait = Character("Bait", 0, None, None, None, None, None, None, None, None, sample_stats)
-stats_to_string(bait)
-damage(bait, 45, "head", False)
+# sample_stats = Character_Stats(10, 10, 5, 3, 5, 6, 9, 4, 6)
+# bait = Character("Bait", 0, None, None, None, None, None, None, None, None, sample_stats)
+# stats_to_string(bait)
+# damage(bait, 45, "head", False)
