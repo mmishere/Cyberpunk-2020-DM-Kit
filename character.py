@@ -5,27 +5,8 @@ from items import BodyParts, Armor, Gear, Weapon
 # also need to track lifepath, inventory, descriptions, affectations, etc.
 class Character:
     # eb is a number, armor is a dict from strings to Armor, cyberware is a list, gear is a list
-    def __init__(self, eb, head_armor, torso_armor, r_arm_armor, l_arm_armor, r_leg_armor, l_leg_armor, cyberware, gear, armor_values, stat_values):
-        # if armor_values:
-        #     self.armor = armor_values
-        # else:
-        #     self.armor = Character_Armor()
-        
-        if stat_values:
-            self.stats = stat_values
-        else:
-            self.stats = Character_Stats(0, 0, 0, 0, 0, 0, 0, 0, 0)
-        
-        # what if someone has more than one piece of armor on a given part? could make that a list i guess, i dunno
-        self.armor = {
-            "head": head_armor,
-            "torso": torso_armor,
-            "r_arm": r_arm_armor,
-            "l_arm": l_arm_armor,
-            "r_leg": r_leg_armor,
-            "l_leg": l_leg_armor
-        }
-        
+    def __init__(self, name, eb, head_armor, torso_armor, r_arm_armor, l_arm_armor, r_leg_armor, l_leg_armor, cyberware, gear, stat_values):
+        self.name = name
         self.eb = eb
         self.cyberware = cyberware
         self.gear = gear
@@ -41,8 +22,22 @@ class Character:
             "l_leg": 0
         }
         
+        if stat_values:
+            self.stats = stat_values
+        else:
+            self.stats = Character_Stats(0, 0, 0, 0, 0, 0, 0, 0, 0)
+        
+        # what if someone has more than one piece of armor on a given part? could make that a list i guess, i dunno
+        self.armor = {
+            "head": head_armor,
+            "torso": torso_armor,
+            "r_arm": r_arm_armor,
+            "l_arm": l_arm_armor,
+            "r_leg": r_leg_armor,
+            "l_leg": l_leg_armor
+        }
     
-    
+    # find a better way to do this
     # def set_armor(self): # only useful if you want the person to have default armor, e.g. skinweave; won't be used directly by players
     #     h = int(input("Input head: "))
     #     t = int(input("Input torso: "))
@@ -79,19 +74,20 @@ class NPC:
 
 
 def stats_to_string(character):
-    print("STATs:")
-    print("  INT  [" + str(character.stats.INT) + "] REF [" + str(character.stats.REF) + "] TECH [" + str(character.stats.TECH) + "] COOL [" + str(character.stats.COOL) + "]")
-    print("  ATTR [" + str(character.stats.ATTR) + "] LUCK [" + str(character.stats.LUCK) + "]    MA [" + str(character.stats.MA) + "] BODY [" + str(character.stats.BODY) + "]")
-    print("  EMP  [" + str(character.stats.EMP) + "] Humanity  [" + str(character.stats.humanity) + "]")
-    print("  BTM  [" + str(character.stats.BTM) + "]; " + character.stats.body_type_str)
+    # this looks a bit off if there are any two-digit stat values
+    print("STATS for " + character.name + ":")
+    print("  INT  [" + str(character.stats.INT) + "]  REF [" + str(character.stats.REF) + "] TECH [" + str(character.stats.TECH) + "] COOL [" + str(character.stats.COOL) + "]")
+    print("  ATTR [" + str(character.stats.ATTR) + "] LUCK [" + str(character.stats.LUCK) + "]   MA [" + str(character.stats.MA) + "] BODY [" + str(character.stats.BODY) + "]")
+    print("  EMP  [" + str(character.stats.EMP) + "] Humanity [" + str(character.stats.humanity) + "]")
+    print("  BTM  [" + str(character.stats.BTM) + "], " + character.stats.body_type_str)
     print("  Run  [" + str(character.stats.run) + "m]" + " Leap [" + str(character.stats.leap) + "m]")
-    print("  Lift [" + str(character.stats.lift) + "kgs / " + str(character.stats.lift * 2.20462) + "lbs]" + "  Carry [" + str(character.stats.carry) + "kgs / " + str(character.stats.carry * 2.20462) + "lbs]")
+    print("  Lift [" + str(character.stats.lift) + "kgs / " + str(int(character.stats.lift * 2.20462)) + "lbs]" + "  Carry [" + str(character.stats.carry) + "kgs / " + str(int(character.stats.carry * 2.20462)) + "lbs]")
     print("  SAVE [" + str(character.stats.SAVE) + "] BTM [" + str(character.stats.BTM) + "]")
 
 def armor_to_string(character):
     pass
 
-def damage(character, is_armor_piercing, damage_amt, body_location):
+def damage(character, damage_amt, body_location, is_armor_piercing):
     assert body_location == "head" or body_location == "torso" or body_location == "r_arm" or body_location == "l_arm" or body_location == "r_leg" or body_location == "l_leg"
     relevant_armor = character.armor[body_location]
     effective_sp = character.intrinsic_armor[body_location]
@@ -129,9 +125,12 @@ def damage(character, is_armor_piercing, damage_amt, body_location):
 
     if (character.hp < 0):
         character.hp = 0
+    
+    print("Current HP: " + str(character.hp))
     # show character.hp in an easily viewable interface that updates when damage is taken
     # alter armor sp if damage gets through, look into the rules for that
 
 sample_stats = Character_Stats(10, 10, 5, 3, 5, 6, 9, 4, 6)
-moi = Character(0, 0, 0, 0, 0, 0, 0, None, None, None, None)
-stats_to_string(moi)
+bait = Character("Bait", 0, None, None, None, None, None, None, None, None, sample_stats)
+stats_to_string(bait)
+damage(bait, 45, "head", False)
