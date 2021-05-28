@@ -35,9 +35,9 @@ class NewCharacterFrame(Frame):
         self.role.pack()
 
         self.npc_str = IntVar(self, value=True)
-        self.chara = Radiobutton(self, **options_bw, text = "Player character", font = (courier_new, 12), variable = self.npc_str, value = False)
+        self.chara = Radiobutton(self, **options_bw, text = "Player character", font = (courier_new, 12), variable = self.npc_str, value = False, selectcolor = 'black')
         self.chara.pack()
-        self.npc = Radiobutton(self, **options_bw, text = "NPC", font = (courier_new, 12), variable = self.npc_str, value = True)
+        self.npc = Radiobutton(self, **options_bw, text = "NPC", font = (courier_new, 12), variable = self.npc_str, value = True, selectcolor = 'black')
         self.npc.pack()
 
         self.enter_character = Button(self, **options_bw, text = "Create character", font = (courier_new, 12), command = lambda: self.create_character())
@@ -48,7 +48,7 @@ class NewCharacterFrame(Frame):
         h = self.handle.get()
         n = self.npc_str.get()
         r = self.role.get() # 0 is PC, 1 is NPC
-        print(h, n, r)
+        print("Handle: " + h + ", Role: " + r + ", NPC: " + str(n))
 
 class App(Tk):
     def __init__(self):
