@@ -40,13 +40,14 @@ class NewCharacterFrame(Frame):
         self.npc = Radiobutton(self, **options_bw, text = "NPC", font = (courier_new, 12), variable = self.npc_str, value = True)
         self.npc.pack()
 
-        self.enter_character = Button(self, **options_bw, text = "Create character", font = (courier_new, 12), command = lambda: self.create_character)
+        self.enter_character = Button(self, **options_bw, text = "Create character", font = (courier_new, 12), command = lambda: self.create_character())
         self.enter_character.pack()
 
-    def create_character():
-        h = handle.get()
-        n = npc_str.get()
-        r = role.get()
+    def create_character(self):
+        print("creating character")
+        h = self.handle.get()
+        n = self.npc_str.get()
+        r = self.role.get() # 0 is PC, 1 is NPC
         print(h, n, r)
 
 class App(Tk):
@@ -59,15 +60,9 @@ class App(Tk):
 
         self.frames = {}
         for fr in (MainFrame, NewCharacterFrame):
-            # commented out string-based frames:
-            # frame_name = fr.__name__
-            # frame = fr(container, self)
-            # self.frames[frame_name] = frame
-            # frame.pack()
             frame = fr(self)
             self.frames[fr] = frame
-            frame.pack()
-            # frame.grid(row = 0, column = 0, sticky = "nsew") # packing is done here
+            frame.grid(row = 0, column = 0, sticky = "nsew") # packing is done here
         
         self.show_frame(MainFrame)
 
