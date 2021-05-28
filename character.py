@@ -5,13 +5,17 @@ from items import BodyParts, Armor, Gear, Weapon
 # also need to track lifepath, inventory, descriptions, affectations, etc.
 class Character:
     # add types to cyberware and gear once that's figured out
-    def __init__(self, npc: bool, name: str, eb: float, head_armor: Armor, torso_armor: Armor, r_arm_armor: Armor, l_arm_armor: Armor, r_leg_armor: Armor, l_leg_armor: Armor, cyberware, gear, stat_values: Character_Stats):
-        self.name = name
+    def __init__(self, handle: str, role: str, npc: bool, eb: float, description: str, notes: str, head_armor: Armor, torso_armor: Armor, r_arm_armor: Armor, l_arm_armor: Armor, r_leg_armor: Armor, l_leg_armor: Armor, cyberware, gear, stat_values: Character_Stats):
+        self.handle = handle
         self.eb = eb
         self.cyberware = cyberware
         self.gear = gear
         self.hp = 40
         self.is_npc = npc
+        self.description = description
+        self.notes = notes
+
+        self.role = role
 
 
         # setting these now so i don't forget them later; relevant if cyberware increases SP, like Skinweave
@@ -77,7 +81,7 @@ class NPC:
 
 def stats_to_string(character: Character):
     # this looks a bit off if there are any two-digit stat values
-    print("STATS for " + character.name + ":")
+    print("STATS for " + character.handle + ":")
     print("  INT  [" + str(character.stats.INT) + "]  REF [" + str(character.stats.REF) + "] TECH [" + str(character.stats.TECH) + "] COOL [" + str(character.stats.COOL) + "]")
     print("  ATTR [" + str(character.stats.ATTR) + "] LUCK [" + str(character.stats.LUCK) + "]   MA [" + str(character.stats.MA) + "] BODY [" + str(character.stats.BODY) + "]")
     print("  EMP  [" + str(character.stats.EMP) + "] Humanity [" + str(character.stats.humanity) + "]")
