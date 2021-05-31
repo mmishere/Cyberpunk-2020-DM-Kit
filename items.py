@@ -3,7 +3,7 @@ from peewee import *
 
 # note that -1 is used to denote "see notes for cost"
 
-db = SqliteDatabase('items.db')
+db = SqliteDatabase('info.db')
 
 class Gear(Model):
     name = CharField()

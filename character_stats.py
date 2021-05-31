@@ -1,3 +1,6 @@
+from peewee import *
+
+
 class Character_Stats:
     def __init__(self, i: int, r: int, t: int, c: int, a: int, l: int, m: int, b: int, e: int):
         if (i == None or r == None or t == None or c == None or a == None or l == None or m == None or b == None or e == None):
@@ -7,7 +10,7 @@ class Character_Stats:
         if (i < 0 or r < 0 or t < 0 or c < 0 or a < 0 or l < 0 or m < 0 or b < 0 or e < 0):
             print("A STAT value was less than 0. Invalid input, please try again.")
             return
-            # might remove the elif, we'll see
+        # might remove the elif, we'll see
         # elif (i > 10 or r > 10 or t > 10 or c > 10 or a > 10 or l > 10 or m > 10 or b > 10 or e > 10):
         #     response = input("A stat value was greater than 10! Are you sure you want to continue? y/n")
         #     if (response == "n"):

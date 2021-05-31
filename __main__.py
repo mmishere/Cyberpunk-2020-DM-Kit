@@ -27,10 +27,10 @@ class NewCharacterFrame(Frame):
         self.top_label.configure(**options_br, font = (courier_new, 16))
         self.top_label.grid(row = 0, column = 50) # column isn't quite centering properly
 
-        self.handle = Entry(self, **options_bw, width = 20, font = (courier_new, 14))
+        self.handle = Entry(self, **options_bw, width = 15, font = (courier_new, 14), justify = 'center')
         self.handle.insert(0, "Enter Handle")
         self.handle.grid(row = 1, column = 0, padx = 20)
-        self.role = Entry(self, **options_bw, width = 0, font = (courier_new, 14))
+        self.role = Entry(self, **options_bw, width = 15, font = (courier_new, 14), justify = 'center')
         self.role.insert(0, "Enter Role")
         self.role.grid(row = 2, column = 0)
 
@@ -62,15 +62,15 @@ class NewCharacterFrame(Frame):
         BODY_label = Label(self, text = "BODY", **options_bw, font = (courier_new, 14))
         EMP_label = Label(self, text = "EMP", **options_bw, font = (courier_new, 14))
 
-        INT_input = Entry(self, textvariable = self.INT_val, width = 2, **options_bw)
-        REF_input = Entry(self, textvariable = self.REF_val, width = 2, **options_bw)
-        TECH_input = Entry(self, textvariable = self.TECH_val, width = 2, **options_bw)
-        COOL_input = Entry(self, textvariable = self.COOL_val, width = 2, **options_bw)
-        ATTR_input = Entry(self, textvariable = self.ATTR_val, width = 2, **options_bw)
-        LUCK_input = Entry(self, textvariable = self.LUCK_val, width = 2, **options_bw)
-        MA_input = Entry(self, textvariable = self.MA_val, width = 2, **options_bw)
-        BODY_input = Entry(self, textvariable = self.BODY_val, width = 2, **options_bw)
-        EMP_input = Entry(self, textvariable = self.EMP_val, width = 2, **options_bw)
+        INT_input = Entry(self, textvariable = self.INT_val, width = 2, **options_bw, font = (courier_new, 14))
+        REF_input = Entry(self, textvariable = self.REF_val, width = 2, **options_bw, font = (courier_new, 14))
+        TECH_input = Entry(self, textvariable = self.TECH_val, width = 2, **options_bw, font = (courier_new, 14))
+        COOL_input = Entry(self, textvariable = self.COOL_val, width = 2, **options_bw, font = (courier_new, 14))
+        ATTR_input = Entry(self, textvariable = self.ATTR_val, width = 2, **options_bw, font = (courier_new, 14))
+        LUCK_input = Entry(self, textvariable = self.LUCK_val, width = 2, **options_bw, font = (courier_new, 14))
+        MA_input = Entry(self, textvariable = self.MA_val, width = 2, **options_bw, font = (courier_new, 14))
+        BODY_input = Entry(self, textvariable = self.BODY_val, width = 2, **options_bw, font = (courier_new, 14))
+        EMP_input = Entry(self, textvariable = self.EMP_val, width = 2, **options_bw, font = (courier_new, 14))
 
         INT_label.grid(row = 10, column = 0)
         INT_input.grid(row = 10, column = 1)
@@ -109,16 +109,97 @@ class NewCharacterFrame(Frame):
         # armor
 
 
-
-
         self.enter_character = Button(self, **options_bw, text = "Create character", font = (courier_new, 12), command = lambda: self.create_character())
         self.enter_character.grid(row = 30, column = 30)
 
     def create_character(self):
         print("creating character")
-        stats = Character_Stats(self.INT_val.get(), self.REF_val.get(), self.TECH_val.get(), self.COOL_val.get(), self.ATTR_val.get(), self.LUCK_val.get(), self.MA_val.get(), self.BODY_val.get(), self.EMP_val.get())
-        character = Character(self.handle.get(), self.role.get(), self.is_npc.get(), self.eb.get(), self.description.get(), self.notes.get(), None, None, None, None, None, None, None, None, stats)
-        print("Handle: " + character.handle + ", Role: " + character.role + ", NPC: " + str(character.is_npc))
+
+        int_ = self.INT_val.get()
+        ref_ = self.REF_val.get()
+        tech_ = self.TECH_val.get()
+        cool_ = self.COOL_val.get()
+        attr_ = self.ATTR_val.get()
+        luck_ = self.LUCK_val.get()
+        ma_ = self.MA_val.get()
+        body_ = self.BODY_val.get()
+        emp_ = self.EMP_val.get()
+
+        melee_modifier_ = 0
+        body_type_str_ = ""
+        BTM_ = 0
+
+        if (body_<= 2):
+            melee_modifier = -2
+            body_type_str = "Very weak"
+            BTM = 0
+        elif (body_<= 4):
+            melee_modifier = -1
+            body_type_str = "Weak"
+            BTM = -1
+        elif (body_<= 7):
+            melee_modifier = 0
+            body_type_str = "Average"
+            BTM = -2
+        elif (body_<= 9):
+            melee_modifier = 1
+            body_type_str = "Strong"
+            BTM = -3
+        elif (body_== 10):
+            melee_modifier = 2
+            body_type_str = "Very strong"
+            BTM = -4
+        # after this, the only thing that changes is melee_modifier: see friday night firefight melee section for details
+        elif (body_<= 12):
+            melee_modifier = 4
+            body_type_str = "Superhuman"
+            BTM = -5
+        elif (body_<=  14):
+            melee_modifier = 6
+            body_type_str = "Superhuman"
+            BTM = -5
+        elif (body_>= 15):
+            melee_modifier = 8
+            body_type_str = "Superhuman"
+            BTM = -5
+        
+        stats_ = Stats( \
+            INT=int_, \
+            REF=ref_, \
+            TECH=tech_, \
+            COOL=cool_, \
+            ATTR=attr_, \
+            LUCK=luck_, \
+            MA=ma_, \
+            BODY=body_, \
+            EMP=emp_, \
+            humanity=emp_ * 10, \
+            run=ma_ * 3, \
+            leap=(ma_ * 3) / 4, \
+            carry=body_ * 10, \
+            # INT=self.INT_val.get(),  \
+            # REF=self.REF_val.get(),  \
+            # TECH=self.TECH_val.get(),  \
+            # COOL=self.COOL_val.get(),  \
+            # ATTR=self.ATTR_val.get(),  \
+            # LUCK=self.LUCK_val.get(),  \
+            # MA=self.MA_val.get(),  \
+            # BODY=self.BODY_val.get(),  \
+            # EMP=self.EMP_val.get(),  \
+            # humanity=self.EMP_val.get() * 10,  \
+            # run=self.MA_val.get() * 3,  \
+            # leap=((self.MA_val.get() * 3) / 4),  \
+            # carry=self.BODY_val.get() * 10,  \
+            melee_modifier=melee_modifier,  \
+            body_type_str=body_type_str,  \
+            SAVE=body_, \
+            BTM=BTM)
+        # note that we're not setting hp
+        # TODO: set cyberware, gear, armor
+        new_character = Character(handle=self.handle.get(), role=self.role.get(), is_npc=self.is_npc.get(), eb=self.eb.get(), description=self.description.get(), notes=self.notes.get(), stats=stats_)
+        add_character(new_character)
+        print("Handle: " + new_character.handle + ", Role: " + new_character.role + ", NPC: " + str(new_character.is_npc))
+
 
 class App(Tk):
     def __init__(self):

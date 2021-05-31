@@ -1,83 +1,66 @@
 from character_stats import *
 from character_armor import *
-from items import BodyParts, Armor, Gear, Weapon
+from items import *
 
+class Stats(Model):
+    INT = int
+    REF = int
+    TECH = int
+    COOL = int
+    ATTR = int
+    LUCK = int
+    MA = int
+    BODY = int
+    EMP = int
+    # derived stats are calculated when creating characters, or when altering relevant stats; see __main__ for this
+    humanity = int
+    run = int
+    leap = float
+    lift = int
+    carry = int
+    melee_modifier = int
+    body_type_str = CharField()
+    SAVE = int
+    BTM = int
+    
+    # other derived stats will be calculated on the fly because peewee doesn't seem to allow default values with conditionals
+    # lmao
+    # the code that would calculate them is below:
+        # SAVE = BODY
+        # run = MA * 3
+        # leap = (MA * 3) / 4
+        # lift = BODY * 40
+        # carry = BODY * 10
+        # humanity = EMP * 10
+        
+    class Meta:
+        database = db
+    
+
+IntrinsicArmor = namedtuple("IntrinsicArmor", "head torso left_arm right_arm left_leg right_leg")
+# use True and False to show whether the armor covers a given area
+
+# we have the "db" object here
+# for now, role is a string; possibly change to a class of its own later, although custom roles may be problematic
 # also need to track lifepath, inventory, descriptions, affectations, etc.
-class Character:
-    # add types to cyberware and gear once that's figured out
-    def __init__(self, handle: str, role: str, npc: bool, eb: float, description: str, notes: str, head_armor: Armor, torso_armor: Armor, r_arm_armor: Armor, l_arm_armor: Armor, r_leg_armor: Armor, l_leg_armor: Armor, cyberware, gear, stat_values: Character_Stats):
-        self.handle = handle
-        self.eb = eb
-        self.cyberware = cyberware
-        self.gear = gear
-        self.hp = 40
-        self.is_npc = npc
-        self.description = description
-        self.notes = notes
+class Character(Model):
+    handle = CharField()
+    role = CharField()
+    is_npc = BooleanField()
+    eb = IntegerField(default = 0)
+    description = TextField()
+    notes = TextField()
+    hp = IntegerField(default = 40)
+    cyberware = TextField(default = "Not yet implemented") # change later
+    gear = TextField(default = "Not yet implemented") # change later
+    armor = TextField(default = "Not yet implemented") # change later; ideally we'll have armor as a dict or something filled with Armor objects
+    stats = Stats
 
-        self.role = role
+    class Meta:
+        database = db
 
-
-        # setting these now so i don't forget them later; relevant if cyberware increases SP, like Skinweave
-        self.intrinsic_armor = {
-            "head": 0,
-            "torso": 0,
-            "r_arm": 0,
-            "l_arm": 0,
-            "r_leg": 0,
-            "l_leg": 0
-        }
-        
-        if stat_values:
-            self.stats = stat_values
-        else:
-            self.stats = Character_Stats(0, 0, 0, 0, 0, 0, 0, 0, 0)
-        
-        # what if someone has more than one piece of armor on a given part? could make that a list i guess, i dunno
-        self.armor = {
-            "head": head_armor,
-            "torso": torso_armor,
-            "r_arm": r_arm_armor,
-            "l_arm": l_arm_armor,
-            "r_leg": r_leg_armor,
-            "l_leg": l_leg_armor
-        }
-    
-    # find a better way to do this
-    # def set_armor(self): # only useful if you want the person to have default armor, e.g. skinweave; won't be used directly by players
-    #     h = int(input("Input head: "))
-    #     t = int(input("Input torso: "))
-    #     ra = int(input("Input right arm: "))
-    #     la = int(input("Input left arm: "))
-    #     rl = int(input("Input right leg: "))
-    #     ll = int(input("Input left leg: "))
-    #     self.armor.set_armor_values(h, t, ra, la, rl, ll)
-
-    
-    def set_stats(self):
-        INT = int(input("Input INT: "))
-        REF = int(input("Input REF: "))
-        TECH = int(input("Input TECH: "))
-        COOL = int(input("Input COOL: "))
-        ATTR = int(input("Input ATTR: "))
-        LUCK = int(input("Input LUCK: "))
-        MA = int(input("Input MA: "))
-        BODY = int(input("Input BODY: "))
-        EMP = int(input("Input EMP: "))
-        self.stats.set_stat_values(INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP)
-
-class NPC:
-    def __init__(self, armor_values: Character_Armor = None, stat_values: Character_Stats = None):
-        if armor_values:
-            self.armor = armor_values
-        else:
-            self.armor = Character_Armor()
-        
-        if stat_values:
-            self.stats = stat_values
-        else:
-            self.stats = Character_Stats()
-
+# Character.drop_table()
+# Character.create_table()
 
 def stats_to_string(character: Character):
     # this looks a bit off if there are any two-digit stat values
@@ -85,10 +68,49 @@ def stats_to_string(character: Character):
     print("  INT  [" + str(character.stats.INT) + "]  REF [" + str(character.stats.REF) + "] TECH [" + str(character.stats.TECH) + "] COOL [" + str(character.stats.COOL) + "]")
     print("  ATTR [" + str(character.stats.ATTR) + "] LUCK [" + str(character.stats.LUCK) + "]   MA [" + str(character.stats.MA) + "] BODY [" + str(character.stats.BODY) + "]")
     print("  EMP  [" + str(character.stats.EMP) + "] Humanity [" + str(character.stats.humanity) + "]")
-    print("  BTM  [" + str(character.stats.BTM) + "], " + character.stats.body_type_str)
-    print("  Run  [" + str(character.stats.run) + "m]" + " Leap [" + str(character.stats.leap) + "m]")
-    print("  Lift [" + str(character.stats.lift) + "kgs / " + str(int(character.stats.lift * 2.20462)) + "lbs]" + "  Carry [" + str(character.stats.carry) + "kgs / " + str(int(character.stats.carry * 2.20462)) + "lbs]")
-    print("  SAVE [" + str(character.stats.SAVE) + "] BTM [" + str(character.stats.BTM) + "]")
+    print("  Run  [" + str(character.stats.run) + "m] Leap [" + str(character.stats.leap) + "m]")
+    print("  Lift [" + str(character.stats.lift) + "kgs] Carry [" + str(character.stats.carry) + "kgs")
+    # print("  Lift [" + str(int(character.stats.lift * 2.20462)) + "lbs] Carry [" + str(int(character.stats.carry * 2.20462)) + "]")
+    print("  SAVE [" + str(character.stats.SAVE) + "] BTM [" + str(character.stats.BTM) + "], " + character.stats.body_type_str + ", melee modifier [" + str(character.stats.melee_modifier) + "]")
+
+print("PRINTING ALL CHARACTERS:")
+for g in Character.select():
+    print(g.handle, g.role, str(g.is_npc), str(g.eb), g.description, g.notes, str(g.hp), g.cyberware, g.gear, g.armor)
+    stats_to_string(g)
+
+
+def add_character(character: Character):
+    character.save()
+
+
+    # can use this for logic when adding characters to db 
+        # if stat_values:
+        #     self.stats = stat_values
+        # else:
+        #     self.stats = Character_Stats(0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+# find a more sensible way to do this
+# def set_armor(self): # only useful if you want the person to have default armor, e.g. skinweave; won't be used directly by players
+#     h = int(input("Input head: "))
+#     t = int(input("Input torso: "))
+#     ra = int(input("Input right arm: "))
+#     la = int(input("Input left arm: "))
+#     rl = int(input("Input right leg: "))
+#     ll = int(input("Input left leg: "))
+#     self.armor.set_armor_values(h, t, ra, la, rl, ll)
+
+    
+def set_stats(character: Character):
+    INT = int(input("Input INT: "))
+    REF = int(input("Input REF: "))
+    TECH = int(input("Input TECH: "))
+    COOL = int(input("Input COOL: "))
+    ATTR = int(input("Input ATTR: "))
+    LUCK = int(input("Input LUCK: "))
+    MA = int(input("Input MA: "))
+    BODY = int(input("Input BODY: "))
+    EMP = int(input("Input EMP: "))
+    character.stats.set_stat_values(INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP)
 
 def armor_to_string(character: Character):
     pass
