@@ -1,7 +1,5 @@
-from peewee import *
-
-
-class Character_Stats:
+import json
+class Stats:
     def __init__(self, i: int, r: int, t: int, c: int, a: int, l: int, m: int, b: int, e: int):
         if (i == None or r == None or t == None or c == None or a == None or l == None or m == None or b == None or e == None):
             print("All values must be inputted! INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP.")
@@ -139,3 +137,9 @@ class Character_Stats:
             self.melee_modifier = 8
             self.body_type_str = "Superhuman"
             self.BTM = -5
+
+def serialize_stats(stats: Stats) -> str:
+    return json.dumps(stats)
+
+def deserialize_stats(stats: str) -> Stats:
+    return json.loads(stats)

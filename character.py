@@ -1,44 +1,10 @@
 from character_stats import *
 from character_armor import *
-from items import *
-
-class Stats(Model):
-    INT = int
-    REF = int
-    TECH = int
-    COOL = int
-    ATTR = int
-    LUCK = int
-    MA = int
-    BODY = int
-    EMP = int
-    # derived stats are calculated when creating characters, or when altering relevant stats; see __main__ for this
-    humanity = int
-    run = int
-    leap = float
-    lift = int
-    carry = int
-    melee_modifier = int
-    body_type_str = CharField()
-    SAVE = int
-    BTM = int
-    
-    # other derived stats will be calculated on the fly because peewee doesn't seem to allow default values with conditionals
-    # lmao
-    # the code that would calculate them is below:
-        # SAVE = BODY
-        # run = MA * 3
-        # leap = (MA * 3) / 4
-        # lift = BODY * 40
-        # carry = BODY * 10
-        # humanity = EMP * 10
-        
-    class Meta:
-        database = db
-    
+from items import *    
 
 IntrinsicArmor = namedtuple("IntrinsicArmor", "head torso left_arm right_arm left_leg right_leg")
 # use True and False to show whether the armor covers a given area
+# or numbers? idk
 
 # we have the "db" object here
 # for now, role is a string; possibly change to a class of its own later, although custom roles may be problematic
@@ -54,7 +20,7 @@ class Character(Model):
     cyberware = TextField(default = "Not yet implemented") # change later
     gear = TextField(default = "Not yet implemented") # change later
     armor = TextField(default = "Not yet implemented") # change later; ideally we'll have armor as a dict or something filled with Armor objects
-    stats = Stats
+    stats = TextField() # serialized Stats object
 
     class Meta:
         database = db
@@ -63,15 +29,17 @@ class Character(Model):
 # Character.create_table()
 
 def stats_to_string(character: Character):
+    # deserialize the stats:
+    stats_ = deserialize_stats(character.stats)
     # this looks a bit off if there are any two-digit stat values
     print("STATS for " + character.handle + ":")
-    print("  INT  [" + str(character.stats.INT) + "]  REF [" + str(character.stats.REF) + "] TECH [" + str(character.stats.TECH) + "] COOL [" + str(character.stats.COOL) + "]")
-    print("  ATTR [" + str(character.stats.ATTR) + "] LUCK [" + str(character.stats.LUCK) + "]   MA [" + str(character.stats.MA) + "] BODY [" + str(character.stats.BODY) + "]")
-    print("  EMP  [" + str(character.stats.EMP) + "] Humanity [" + str(character.stats.humanity) + "]")
-    print("  Run  [" + str(character.stats.run) + "m] Leap [" + str(character.stats.leap) + "m]")
-    print("  Lift [" + str(character.stats.lift) + "kgs] Carry [" + str(character.stats.carry) + "kgs")
-    # print("  Lift [" + str(int(character.stats.lift * 2.20462)) + "lbs] Carry [" + str(int(character.stats.carry * 2.20462)) + "]")
-    print("  SAVE [" + str(character.stats.SAVE) + "] BTM [" + str(character.stats.BTM) + "], " + character.stats.body_type_str + ", melee modifier [" + str(character.stats.melee_modifier) + "]")
+    print("  INT  [" + stats_.stats.INT + "]  REF [" + str(stats_.REF) + "] TECH [" + str(stats_.TECH) + "] COOL [" + str(stats_.COOL) + "]")
+    print("  ATTR [" + str(stats_.ATTR) + "] LUCK [" + str(stats_.LUCK) + "]   MA [" + str(stats_.MA) + "] BODY [" + str(stats_.BODY) + "]")
+    print("  EMP  [" + str(stats_.EMP) + "] Humanity [" + str(stats_.humanity) + "]")
+    print("  Run  [" + str(stats_.run) + "m] Leap [" + str(stats_.leap) + "m]")
+    print("  Lift [" + str(stats_.lift) + "kgs] Carry [" + str(stats_.carry) + "kgs")
+    # print("  Lift [" + str(int(stats_.lift * 2.20462)) + "lbs] Carry [" + str(int(stats_.carry * 2.20462)) + "]")
+    print("  SAVE [" + str(stats_.SAVE) + "] BTM [" + str(stats_.BTM) + "], " + stats_.body_type_str + ", melee modifier [" + str(stats_.melee_modifier) + "]")
 
 print("PRINTING ALL CHARACTERS:")
 for g in Character.select():
@@ -110,7 +78,10 @@ def set_stats(character: Character):
     MA = int(input("Input MA: "))
     BODY = int(input("Input BODY: "))
     EMP = int(input("Input EMP: "))
-    character.stats.set_stat_values(INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP)
+
+    stats_ = Stats(INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP)
+    character.stats = serialize_stats(stats_)
+    # character.stats.set_stat_values(INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP)
 
 def armor_to_string(character: Character):
     pass
@@ -137,7 +108,9 @@ def damage(character: Character, damage_amt: int, body_location: str, is_armor_p
     damage_amt -= effective_sp
     if (is_armor_piercing):
         damage_amt /= 2
-    damage_amt -= character.stats.BTM
+    
+    stats_ = deserialize_stats(character.stats)
+    damage_amt -= stats_.BTM
 
     # damage got through, so the armor takes a hit as well
     if (relevant_armor != None):
@@ -159,6 +132,7 @@ def damage(character: Character, damage_amt: int, body_location: str, is_armor_p
     # alter armor sp if damage gets through, look into the rules for that
 
 # sample_stats = Character_Stats(10, 10, 5, 3, 5, 6, 9, 4, 6)
-# bait = Character("Bait", 0, None, None, None, None, None, None, None, None, sample_stats)
+# sample_stats_json = serialize_stats(sample_stats)
+# bait = Character("Bait", 0, None, None, None, None, None, None, None, None, sample_stats_json)
 # stats_to_string(bait)
 # damage(bait, 45, "head", False)

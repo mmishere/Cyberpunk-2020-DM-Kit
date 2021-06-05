@@ -125,78 +125,49 @@ class NewCharacterFrame(Frame):
         body_ = self.BODY_val.get()
         emp_ = self.EMP_val.get()
 
-        melee_modifier_ = 0
-        body_type_str_ = ""
-        BTM_ = 0
+        # melee_modifier_ = 0
+        # body_type_str_ = ""
+        # BTM_ = 0
 
-        if (body_<= 2):
-            melee_modifier = -2
-            body_type_str = "Very weak"
-            BTM = 0
-        elif (body_<= 4):
-            melee_modifier = -1
-            body_type_str = "Weak"
-            BTM = -1
-        elif (body_<= 7):
-            melee_modifier = 0
-            body_type_str = "Average"
-            BTM = -2
-        elif (body_<= 9):
-            melee_modifier = 1
-            body_type_str = "Strong"
-            BTM = -3
-        elif (body_== 10):
-            melee_modifier = 2
-            body_type_str = "Very strong"
-            BTM = -4
-        # after this, the only thing that changes is melee_modifier: see friday night firefight melee section for details
-        elif (body_<= 12):
-            melee_modifier = 4
-            body_type_str = "Superhuman"
-            BTM = -5
-        elif (body_<=  14):
-            melee_modifier = 6
-            body_type_str = "Superhuman"
-            BTM = -5
-        elif (body_>= 15):
-            melee_modifier = 8
-            body_type_str = "Superhuman"
-            BTM = -5
+        # if (body_<= 2):
+        #     melee_modifier = -2
+        #     body_type_str = "Very weak"
+        #     BTM = 0
+        # elif (body_<= 4):
+        #     melee_modifier = -1
+        #     body_type_str = "Weak"
+        #     BTM = -1
+        # elif (body_<= 7):
+        #     melee_modifier = 0
+        #     body_type_str = "Average"
+        #     BTM = -2
+        # elif (body_<= 9):
+        #     melee_modifier = 1
+        #     body_type_str = "Strong"
+        #     BTM = -3
+        # elif (body_== 10):
+        #     melee_modifier = 2
+        #     body_type_str = "Very strong"
+        #     BTM = -4
+        # # after this, the only thing that changes is melee_modifier: see friday night firefight melee section for details
+        # elif (body_<= 12):
+        #     melee_modifier = 4
+        #     body_type_str = "Superhuman"
+        #     BTM = -5
+        # elif (body_<=  14):
+        #     melee_modifier = 6
+        #     body_type_str = "Superhuman"
+        #     BTM = -5
+        # elif (body_>= 15):
+        #     melee_modifier = 8
+        #     body_type_str = "Superhuman"
+        #     BTM = -5
         
-        stats_ = Stats( \
-            INT=int_, \
-            REF=ref_, \
-            TECH=tech_, \
-            COOL=cool_, \
-            ATTR=attr_, \
-            LUCK=luck_, \
-            MA=ma_, \
-            BODY=body_, \
-            EMP=emp_, \
-            humanity=emp_ * 10, \
-            run=ma_ * 3, \
-            leap=(ma_ * 3) / 4, \
-            carry=body_ * 10, \
-            # INT=self.INT_val.get(),  \
-            # REF=self.REF_val.get(),  \
-            # TECH=self.TECH_val.get(),  \
-            # COOL=self.COOL_val.get(),  \
-            # ATTR=self.ATTR_val.get(),  \
-            # LUCK=self.LUCK_val.get(),  \
-            # MA=self.MA_val.get(),  \
-            # BODY=self.BODY_val.get(),  \
-            # EMP=self.EMP_val.get(),  \
-            # humanity=self.EMP_val.get() * 10,  \
-            # run=self.MA_val.get() * 3,  \
-            # leap=((self.MA_val.get() * 3) / 4),  \
-            # carry=self.BODY_val.get() * 10,  \
-            melee_modifier=melee_modifier,  \
-            body_type_str=body_type_str,  \
-            SAVE=body_, \
-            BTM=BTM)
+        stats_ = Stats(INT=int_, REF=ref_, TECH=tech_, COOL=cool_, ATTR=attr_, LUCK=luck_, MA=ma_, BODY=body_, EMP=emp_)
+        stats_serialized = serialize_stats(stats_)
         # note that we're not setting hp
         # TODO: set cyberware, gear, armor
-        new_character = Character(handle=self.handle.get(), role=self.role.get(), is_npc=self.is_npc.get(), eb=self.eb.get(), description=self.description.get(), notes=self.notes.get(), stats=stats_)
+        new_character = Character(handle=self.handle.get(), role=self.role.get(), is_npc=self.is_npc.get(), eb=self.eb.get(), description=self.description.get(), notes=self.notes.get(), stats=stats_serialized)
         add_character(new_character)
         print("Handle: " + new_character.handle + ", Role: " + new_character.role + ", NPC: " + str(new_character.is_npc))
 
