@@ -112,7 +112,6 @@ class NewCharacterFrame(Frame):
         self.enter_character.grid(row = 30, column = 30)
 
 
-
     def create_character(self):
         print("creating character")
 
@@ -135,6 +134,63 @@ class NewCharacterFrame(Frame):
         print("Handle: " + new_character.handle + ", Role: " + new_character.role + ", NPC: " + str(new_character.is_npc))
 
 
+class AllCharactersFrame(Frame):
+    def __init__(self, container):
+        super().__init__(container)
+
+        self.configure(bg = 'black')
+
+        self.top_label = Label(self, text = "Characters")
+        self.top_label.configure(**options_br, font = (courier_new, 16))
+        self.top_label.grid(row = 0, column = 50) # column isn't quite centering properly
+
+        # call all characters from DB
+        self.characters = []
+        for c in Character.select():
+            self.characters.append(c)
+        
+        # for each character, set up a box for name/stats/HP/SP, as in the official character sheets
+        # also add a delete character button, which brings up a warning screen, then deletes if users hit continue
+        # and an add character button that redirects to the new characters frame
+
+class PlayersFrame(Frame):
+    def __init__(self, container):
+        super().__init__(container)
+
+        self.configure(bg = 'black')
+
+        self.top_label = Label(self, text = "Player Characters")
+        self.top_label.configure(**options_br, font = (courier_new, 16))
+        self.top_label.grid(row = 0, column = 50) # column isn't quite centering properly
+
+        # call all characters from DB
+        self.players = []
+        for c in Character.select().where(Character.is_npc == 1):
+            self.players.append(c)
+        
+        # for each character, set up a box for name/stats/HP/SP, as in the official character sheets
+        # also add a delete character button, which brings up a warning screen, then deletes if users hit continue
+        # and an add character button that redirects to the new characters frame
+
+class NPCsFrame(Frame):
+    def __init__(self, container):
+        super().__init__(container)
+
+        self.configure(bg = 'black')
+
+        self.top_label = Label(self, text = "NPCs")
+        self.top_label.configure(**options_br, font = (courier_new, 16))
+        self.top_label.grid(row = 0, column = 50) # column isn't quite centering properly
+
+        # call all characters from DB
+        self.NPCs = []
+        for c in Character.select().where(Character.is_npc == 1):
+            self.NPCs.append(c)
+        
+        # for each character, set up a box for name/stats/HP/SP, as in the official character sheets
+        # also add a delete character button, which brings up a warning screen, then deletes if users hit continue
+        # and an add character button that redirects to the new characters frame
+
 class App(Tk):
     def __init__(self):
         super().__init__()
@@ -144,7 +200,7 @@ class App(Tk):
         self.iconbitmap('icon.ico')
 
         self.frames = {}
-        for fr in (MainFrame, NewCharacterFrame):
+        for fr in (MainFrame, NewCharacterFrame, AllCharactersFrame, PlayersFrame, NPCsFrame):
             frame = fr(self)
             self.frames[fr] = frame
             frame.grid(row = 0, column = 0, sticky = "nsew") # packing is done here

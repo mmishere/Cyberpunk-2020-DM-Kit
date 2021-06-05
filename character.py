@@ -48,25 +48,13 @@ for g in Character.select():
 
 def add_character(character: Character):
     character.save()
+    # maybe use this for logic when adding characters to db: 
+    # if stat_values:
+    #     self.stats = stat_values
+    # else:
+    #     self.stats = Character_Stats(0, 0, 0, 0, 0, 0, 0, 0, 0)
 
 
-    # can use this for logic when adding characters to db 
-        # if stat_values:
-        #     self.stats = stat_values
-        # else:
-        #     self.stats = Character_Stats(0, 0, 0, 0, 0, 0, 0, 0, 0)
-
-# find a more sensible way to do this
-# def set_armor(self): # only useful if you want the person to have default armor, e.g. skinweave; won't be used directly by players
-#     h = int(input("Input head: "))
-#     t = int(input("Input torso: "))
-#     ra = int(input("Input right arm: "))
-#     la = int(input("Input left arm: "))
-#     rl = int(input("Input right leg: "))
-#     ll = int(input("Input left leg: "))
-#     self.armor.set_armor_values(h, t, ra, la, rl, ll)
-
-    
 def set_stats(character: Character):
     INT = int(input("Input INT: "))
     REF = int(input("Input REF: "))
@@ -80,7 +68,6 @@ def set_stats(character: Character):
 
     stats_ = Stats(INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP)
     character.stats = serialize_stats(stats_)
-    # character.stats.set_stat_values(INT, REF, TECH, COOL, ATTR, LUCK, MA, BODY, EMP)
 
 def armor_to_string(character: Character):
     pass
