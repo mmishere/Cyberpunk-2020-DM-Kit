@@ -33,13 +33,13 @@ def stats_to_string(character: Character):
     stats_ = deserialize_stats(character.stats)
     # this looks a bit off if there are any two-digit stat values
     print("STATS for " + character.handle + ":")
-    print("  INT  [" + stats_.stats.INT + "]  REF [" + str(stats_.REF) + "] TECH [" + str(stats_.TECH) + "] COOL [" + str(stats_.COOL) + "]")
+    print("  INT  [" + str(stats_.INT) + "]  REF [" + str(stats_.REF) + "] TECH [" + str(stats_.TECH) + "] COOL [" + str(stats_.COOL) + "]")
     print("  ATTR [" + str(stats_.ATTR) + "] LUCK [" + str(stats_.LUCK) + "]   MA [" + str(stats_.MA) + "] BODY [" + str(stats_.BODY) + "]")
     print("  EMP  [" + str(stats_.EMP) + "] Humanity [" + str(stats_.humanity) + "]")
     print("  Run  [" + str(stats_.run) + "m] Leap [" + str(stats_.leap) + "m]")
-    print("  Lift [" + str(stats_.lift) + "kgs] Carry [" + str(stats_.carry) + "kgs")
+    print("  Lift [" + str(stats_.lift) + "kgs] Carry [" + str(stats_.carry) + "kgs]")
     # print("  Lift [" + str(int(stats_.lift * 2.20462)) + "lbs] Carry [" + str(int(stats_.carry * 2.20462)) + "]")
-    print("  SAVE [" + str(stats_.SAVE) + "] BTM [" + str(stats_.BTM) + "], " + stats_.body_type_str + ", melee modifier [" + str(stats_.melee_modifier) + "]")
+    print("  SAVE [" + str(stats_.SAVE) + "] BTM [" + str(stats_.BTM) + "] Melee Modifier [" + str(stats_.melee_modifier) + "], " + stats_.body_type_str)
 
 print("PRINTING ALL CHARACTERS:")
 for g in Character.select():

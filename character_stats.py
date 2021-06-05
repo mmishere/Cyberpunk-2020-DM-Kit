@@ -1,4 +1,6 @@
 import json
+import jsonpickle
+
 class Stats:
     def __init__(self, i: int, r: int, t: int, c: int, a: int, l: int, m: int, b: int, e: int):
         if (i == None or r == None or t == None or c == None or a == None or l == None or m == None or b == None or e == None):
@@ -139,7 +141,12 @@ class Stats:
             self.BTM = -5
 
 def serialize_stats(stats: Stats) -> str:
-    return json.dumps(stats)
+    # return json.dumps(stats, default=lambda o: o.__dict__)
+    return jsonpickle.encode(stats)
 
 def deserialize_stats(stats: str) -> Stats:
-    return json.loads(stats)
+    # return json.loads(stats)
+    return jsonpickle.decode(stats)
+
+# def toJson(self):
+#     return json.dumps(stats, default=lambda o: o.__dict__)

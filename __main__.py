@@ -108,9 +108,10 @@ class NewCharacterFrame(Frame):
         # notes
         # armor
 
-
         self.enter_character = Button(self, **options_bw, text = "Create character", font = (courier_new, 12), command = lambda: self.create_character())
         self.enter_character.grid(row = 30, column = 30)
+
+
 
     def create_character(self):
         print("creating character")
@@ -124,46 +125,8 @@ class NewCharacterFrame(Frame):
         ma_ = self.MA_val.get()
         body_ = self.BODY_val.get()
         emp_ = self.EMP_val.get()
-
-        # melee_modifier_ = 0
-        # body_type_str_ = ""
-        # BTM_ = 0
-
-        # if (body_<= 2):
-        #     melee_modifier = -2
-        #     body_type_str = "Very weak"
-        #     BTM = 0
-        # elif (body_<= 4):
-        #     melee_modifier = -1
-        #     body_type_str = "Weak"
-        #     BTM = -1
-        # elif (body_<= 7):
-        #     melee_modifier = 0
-        #     body_type_str = "Average"
-        #     BTM = -2
-        # elif (body_<= 9):
-        #     melee_modifier = 1
-        #     body_type_str = "Strong"
-        #     BTM = -3
-        # elif (body_== 10):
-        #     melee_modifier = 2
-        #     body_type_str = "Very strong"
-        #     BTM = -4
-        # # after this, the only thing that changes is melee_modifier: see friday night firefight melee section for details
-        # elif (body_<= 12):
-        #     melee_modifier = 4
-        #     body_type_str = "Superhuman"
-        #     BTM = -5
-        # elif (body_<=  14):
-        #     melee_modifier = 6
-        #     body_type_str = "Superhuman"
-        #     BTM = -5
-        # elif (body_>= 15):
-        #     melee_modifier = 8
-        #     body_type_str = "Superhuman"
-        #     BTM = -5
         
-        stats_ = Stats(INT=int_, REF=ref_, TECH=tech_, COOL=cool_, ATTR=attr_, LUCK=luck_, MA=ma_, BODY=body_, EMP=emp_)
+        stats_ = Stats(int_, ref_, tech_, cool_, attr_, luck_, ma_, body_, emp_)
         stats_serialized = serialize_stats(stats_)
         # note that we're not setting hp
         # TODO: set cyberware, gear, armor
