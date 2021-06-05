@@ -37,8 +37,7 @@ def stats_to_string(character: Character):
     print("  ATTR [" + str(stats_.ATTR) + "] LUCK [" + str(stats_.LUCK) + "]   MA [" + str(stats_.MA) + "] BODY [" + str(stats_.BODY) + "]")
     print("  EMP  [" + str(stats_.EMP) + "] Humanity [" + str(stats_.humanity) + "]")
     print("  Run  [" + str(stats_.run) + "m] Leap [" + str(stats_.leap) + "m]")
-    print("  Lift [" + str(stats_.lift) + "kgs] Carry [" + str(stats_.carry) + "kgs]")
-    # print("  Lift [" + str(int(stats_.lift * 2.20462)) + "lbs] Carry [" + str(int(stats_.carry * 2.20462)) + "]")
+    print("  Lift [" + str(stats_.lift) + "kgs / " + str(int(stats_.lift * 2.20462)) + "lbs] Carry [" + str(stats_.carry) + "kgs / " + str(int(stats_.carry * 2.20462)) + "lbs]")
     print("  SAVE [" + str(stats_.SAVE) + "] BTM [" + str(stats_.BTM) + "] Melee Modifier [" + str(stats_.melee_modifier) + "], " + stats_.body_type_str)
 
 print("PRINTING ALL CHARACTERS:")

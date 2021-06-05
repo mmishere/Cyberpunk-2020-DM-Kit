@@ -125,10 +125,10 @@ class NewCharacterFrame(Frame):
         ma_ = self.MA_val.get()
         body_ = self.BODY_val.get()
         emp_ = self.EMP_val.get()
-        
+
         stats_ = Stats(int_, ref_, tech_, cool_, attr_, luck_, ma_, body_, emp_)
         stats_serialized = serialize_stats(stats_)
-        # note that we're not setting hp
+        # hp isn't set intentionally, it should just be 40 in all cases for 2020 characters
         # TODO: set cyberware, gear, armor
         new_character = Character(handle=self.handle.get(), role=self.role.get(), is_npc=self.is_npc.get(), eb=self.eb.get(), description=self.description.get(), notes=self.notes.get(), stats=stats_serialized)
         add_character(new_character)
