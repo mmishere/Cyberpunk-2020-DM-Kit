@@ -60,95 +60,6 @@ class Armor(Model):
 
 db.connect()
 
-# all of these are already done
-# Gear.create_table()
-# Weapon.create_table()
-# Armor.create_table()
-
-# Armor.drop_table()
-
-
-
-# Deleting an item:
-# idnumber = 129
-# to_delete = Gear.get(Gear.id == idnumber)
-# to_delete.delete_instance()
-
-# Updating an item:
-# idnumber = 129
-# to_update = Gear.get(Gear.id == idnumber)
-# to_update.cost = "20.00 / level"
-# to_update.notes = "Difficulties: Low Security is AVERAGE (15), Medium Security is DIFFICULT (20), high security is VERY DIFFICULT (25), Maximum Security is NEARLY IMPOSSIBLE (30)."
-# five.save()
-
-
-
-
-
-# for g in Gear.select():
-    # print(g.type)
-    # if (g.cost == "-1.0"):
-    # if (g.notes != ""):
-    #     print(str(g.id) + " | " + g.cost + " | " + g.notes)
-    # print(g.cost)
-    # print(g.name)
-    # print(str(g.id) + "\n   " + g.name + "\n   " + g.cost + "\n   " + g.description + "\n   " + g.type + "\n   " + g.notes)
-    # print(g.id, g.name)
-    # new_item = Gear2TheSequel.create(name=g.name, cost=str(g.cost), description=g.description, type=g.type, notes=g.notes)
-    # new_item.save()
-
-
-# For me to input items with:
-# while True:
-#     # run through and add in items
-#     item_type = input("g, w, a, stop: ")
-#     if (item_type == 'g'):
-#         x_type = input("type: ")
-#         x_name = input("name: ")
-#         x_cost = float(input("cost: "))
-#         x_descr = input("description: ")
-#         x_notes = input("notes: ")
-#         # gear = Gear(name=x_name, cost=x_cost, description=x_descr, type=x_type, notes=x_notes)
-#         # gear.save()
-#         gear = Gear.create(name=x_name, cost=x_cost, description=x_descr, type=x_type, notes=x_notes)
-#         gear.save()
-
-#     elif (item_type == 'w'):
-#         x_name = input("name: ")
-#         x_cost = float(input("cost: "))
-#         x_type = input("type: ")
-#         x_wa = int(input("WA: "))
-#         x_conc = input("conceal: ")
-#         x_avail = input("avail: ")
-#         x_dmg = input("dmg: ")
-#         x_num_shots = int(input("num shots:" ))
-#         x_rof = int(input("RoF: "))
-#         x_range = input("range: ")
-#         x_notes = input("notes: ")
-#         weapon = Weapon(name=x_name, cost=x_cost, type=x_type, weapon_accuracy = x_wa, concealability=x_conc, damage=x_dmg, rate_of_fire=x_rof, range=x_range, notes=x_notes )
-#         weapon.save()
-
-#     elif (item_type == 'a'):
-#         x_name = input("name: ")
-#         x_cost = float(input("cost: "))
-#         x_penalty = input("ref penalty: ")
-
-#         x_head = bool(input("head: "))
-#         x_torso = bool(input("torso: "))
-#         x_ra = bool(input("r. arm: "))
-#         x_la = bool(input("l. arm: "))
-#         x_rl = bool(input("r. leg: "))
-#         x_ll = bool(input("l. leg: "))
-#         x_parts = BodyParts(x_head, x_torso, x_ra, x_la, x_rl, x_ll)
-
-#         armor = Armor(name=x_name, cost=x_cost, body_parts = x_parts)
-#         armor.save()
-#     elif (item_type == "stop"):
-#         break
-#     else:
-#         print("Bad input")
-
-
 def add_gear():
     x_type = input("Any fields can be left empty if desired.\nInput gear type: ")
     x_name = input("Input gear name: ")
@@ -162,7 +73,11 @@ def remove_gear(name: str):
     gear = Gear.get(Gear.name == name)
     gear.delete_instance()
 
-def add_weapon():
+
+# lets user add their own weapon
+# through tk, they select type, etc. and it gets added
+# this needs a lot of changes
+def add_weapon(name, cost, type_, wa, conc, avail, dmg, num_shots, rof, range, notes):
     # ADD TYPE CHECKING SO THAT PEOPLE CAN'T INPUT UNDESIRED CHARS, E.G. LETTERS WHERE NUMBERS SHOULD BE
     # except for cases where the cost is a range or something?? or unlisted. hm.
     w_name = input("Any fields can be left empty if desired.\nInput weapon name: ")

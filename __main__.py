@@ -3,11 +3,12 @@ from items import *
 from menu_placeholders import * # remove this later once all frames are set up
 
 from tkinter import *
+from tkinter.ttk import Combobox
 
 courier_new = 'Courier New'
 
-options_br = {'bg': 'black', 'fg': 'red'} # black red
-options_bw = {'bg': 'black', 'fg': 'white'} # black white
+options_br = {'background': 'black', 'foreground': 'red'} # black red
+options_bw = {'background': 'black', 'foreground': 'white'} # black white
 
 class MainFrame(Frame):
     def __init__(self, container):
@@ -108,7 +109,7 @@ class NewCharacterFrame(Frame):
         # notes
         # armor
 
-        self.enter_character = Button(self, **options_bw, text = "Create character", font = (courier_new, 12), command = lambda: self.create_character())
+        self.enter_character = Button(self, **options_bw, text = "Create Character", font = (courier_new, 12), command = lambda: self.create_character())
         self.enter_character.grid(row = 30, column = 30)
 
 
@@ -163,7 +164,7 @@ class PlayersFrame(Frame):
         self.top_label.configure(**options_br, font = (courier_new, 16))
         self.top_label.grid(row = 0, column = 50) # column isn't quite centering properly
 
-        # call all characters from DB
+        # call players from DB
         self.players = []
         for c in Character.select().where(Character.is_npc == 1):
             self.players.append(c)
@@ -182,7 +183,7 @@ class NPCsFrame(Frame):
         self.top_label.configure(**options_br, font = (courier_new, 16))
         self.top_label.grid(row = 0, column = 50) # column isn't quite centering properly
 
-        # call all characters from DB
+        # call NPCs from DB
         self.NPCs = []
         for c in Character.select().where(Character.is_npc == 1):
             self.NPCs.append(c)
@@ -190,6 +191,108 @@ class NPCsFrame(Frame):
         # for each character, set up a box for name/stats/HP/SP, as in the official character sheets
         # also add a delete character button, which brings up a warning screen, then deletes if users hit continue
         # and an add character button that redirects to the new characters frame
+
+
+
+class CreateWeaponFrame(Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        self.configure(bg = 'black')
+        self.top_label = Label(self, text = "Create Weapon")
+        self.top_label.configure(**options_br, font = (courier_new, 16))
+        self.top_label.grid(row = 0, column = 50) # column isn't quite centering properly
+
+        # name, cost, type, WA, conceal, avail, dmg, num_shots, RoF, range, notes
+        # why does python not have a char type sldkfjlsdkfja;ljdflkja;klsdjf;lkajsd;flkjasdf
+
+
+        self.name = Entry(self, **options_bw, width = 20, font = (courier_new, 14), justify = 'center')
+        self.name.insert(0, "Enter Weapon Name")
+        self.name.grid(row = 1, column = 0, padx = 20)
+
+
+        self.type = StringVar(self, value = "")
+        weapon_types = ['Pistol', 'SMG', 'Shotgun', 'Rifle', 'Heavy Weapon', 'Melee', 'Exotic', 'Other']
+        type_dropdown = OptionMenu(self, self.type, *weapon_types)
+        # have to configure the optionmenu appearance like this because it doesn't work in initialization line
+        type_dropdown.configure(**options_bw)
+        type_dropdown['menu'].configure(**options_bw)
+        type_dropdown.grid(row = 2, column = 0, padx = 20)
+
+
+        self.WA = IntVar(self, value = 0)
+        WA_label = Label(self, text = "WA", **options_bw, font = (courier_new, 14))
+        WA_input = Entry(self, textvariable = self.WA, width = 2, **options_bw, font = (courier_new, 14))
+        WA_label.grid(row = 3, column = 0)
+        WA_input.grid(row = 3, column = 1)
+        
+
+
+        self.cost = DoubleVar(self, value = 0)
+        cost_label = Label(self, text = "Cost", **options_bw, font = (courier_new, 14))
+        cost_input = Entry(self, textvariable = self.cost, width = 4, **options_bw, font = (courier_new, 14))
+        cost_label.grid(row = 10, column = 0)
+        cost_input.grid(row = 10, column = 1)
+
+        self.concealability = StringVar(self, value = "")
+        concealability_list = ['Pocket (P)', 'Jacket (J)', 'Long Coat (L)', 'Not Concealable (N)']
+        concealability_dropdown = OptionMenu(self, self.concealability, concealability_list[0], *concealability_list)
+        concealability_dropdown.configure(**options_bw)
+        concealability_dropdown['menu'].configure(**options_bw)
+        concealability_dropdown.grid(row = 3, column = 0, padx = 20)
+        # concealability_dropdown = Combobox(self, textvariable = self.concealability, **options_bw)
+        # concealability_dropdown['values'] = ('Pocket (P)', 'Jacket (J)', 'Long Coat (L)', 'Can\'t Be Concealed (N)')
+        # concealability_dropdown.grid(row = 3, column = 0, padx = 20)
+
+        self.availability = StringVar(self, value = "")
+        availability_list = ['Excellent (E)', 'Common (C)', 'Poor (P)', 'Rare (R)']
+        availability_dropdown = OptionMenu(self, self.availability, availability_list[0], *availability_list)
+        availability_dropdown.configure(**options_bw)
+        availability_dropdown['menu'].configure(**options_bw)
+        availability_dropdown.grid(row = 4, column = 0)
+
+
+        # we'll do some fancy stuff so that players can select dice and + damage, then format it properly for the database
+        self.damage = StringVar(self, value = "")
+        damage_label = Label(self, text = "Damage", **options_bw, font = (courier_new, 14))
+        damage_input = Entry(self, textvariable = self.damage, width = 2, **options_bw, font = (courier_new, 14))
+        damage_label.grid(row = 14, column = 0)
+        damage_input.grid(row = 14, column = 1)
+
+
+        self.num_shots = IntVar(self, value = 0) # if melee, ignore this
+        num_shots_label = Label(self, text = "Num. Shots", **options_bw, font = (courier_new, 14))
+        num_shots_input = Entry(self, textvariable = self.num_shots, width = 2, **options_bw, font = (courier_new, 14))
+        num_shots_label.grid(row = 15, column = 0)
+        num_shots_input.grid(row = 15, column = 1)
+
+
+        self.rate_of_fire = IntVar(self, value = 0)
+        rate_of_fire_label = Label(self, text = "RoF", **options_bw, font = (courier_new, 14))
+        rate_of_fire_input = Entry(self, textvariable = self.rate_of_fire, width = 2, **options_bw, font = (courier_new, 14))
+        rate_of_fire_label.grid(row = 16, column = 0)
+        rate_of_fire_input.grid(row = 16, column = 1)
+
+        self.range = IntVar(self, value = 0)
+        range_label = Label(self, text = "Range", **options_bw, font = (courier_new, 14))        
+        range_input = Entry(self, textvariable = self.range, width = 2, **options_bw, font = (courier_new, 14))
+        range_label.grid(row = 17, column = 0)
+        range_input.grid(row = 17, column = 1)
+
+        self.notes = StringVar(self, value = "") # if the user has anything to add
+        # self.notes = Entry(self, **options_bw, width = 20, height = 12, font = (courier_new, 14), justify = 'center')
+        self.notes = Entry(self, **options_bw, width = 20, font = (courier_new, 14), justify = 'center')
+        self.notes.insert(0, "Notes")
+        self.notes.grid(row = 30, column = 0, padx = 20)
+
+
+        self.enter_weapon = Button(self, **options_bw, text = "Create Weapon", font = (courier_new, 12), command = lambda: self.create_weapon())
+        self.enter_weapon.grid(row = 50, column = 0)
+    
+    def create_weapon():
+        add_weapon(self.name, self.cost, self.type, self.WA, self.concealability, self.availability, self.damage, self.num_shots, self.rate_of_fire, self.range, self.notes)
+
+
 
 class App(Tk):
     def __init__(self):
@@ -200,7 +303,7 @@ class App(Tk):
         self.iconbitmap('icon.ico')
 
         self.frames = {}
-        for fr in (MainFrame, NewCharacterFrame, AllCharactersFrame, PlayersFrame, NPCsFrame):
+        for fr in (MainFrame, NewCharacterFrame, AllCharactersFrame, PlayersFrame, NPCsFrame, CreateWeaponFrame):
             frame = fr(self)
             self.frames[fr] = frame
             frame.grid(row = 0, column = 0, sticky = "nsew") # packing is done here
@@ -249,6 +352,7 @@ class App(Tk):
         weapons_menu.add_command(label = "Rifles", command = lambda: self.show_frame(RiflesFrame))
         weapons_menu.add_command(label = "Shotguns", command = lambda: self.show_frame(ShotgunsFrame))
         weapons_menu.add_command(label = "SMGs", command = lambda: self.show_frame(SMGsFrame))
+        weapons_menu.add_command(label = "Create New Weapon", command = lambda: self.show_frame(CreateWeaponFrame))
 
 
         # misc is for player-added items with no type
@@ -277,6 +381,9 @@ class App(Tk):
             frame.tkraise()
         except:
             print(to_show)
+
+
+
 
 if __name__ == "__main__":
     app = App()
