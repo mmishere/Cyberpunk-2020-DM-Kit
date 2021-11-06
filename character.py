@@ -20,6 +20,7 @@ class Character(Model):
     cyberware = TextField(default = "Not yet implemented") # change later
     gear = TextField(default = "Not yet implemented") # change later
     armor = TextField(default = "Not yet implemented") # change later; ideally we'll have armor as a dict or something filled with Armor objects
+    intrinsic_armor = IntrinsicArmor
     stats = TextField() # serialized Stats object
 
     class Meta:
@@ -31,7 +32,7 @@ class Character(Model):
 def stats_to_string(character: Character):
     # deserialize the stats:
     stats_ = deserialize_stats(character.stats)
-    # this looks a bit off if there are any two-digit stat values
+    # this looks a bit off if there are any two-digit stat values, but whatever for now
     print("STATS for " + character.handle + ":")
     print("  INT  [" + str(stats_.INT) + "]  REF [" + str(stats_.REF) + "] TECH [" + str(stats_.TECH) + "] COOL [" + str(stats_.COOL) + "]")
     print("  ATTR [" + str(stats_.ATTR) + "] LUCK [" + str(stats_.LUCK) + "]   MA [" + str(stats_.MA) + "] BODY [" + str(stats_.BODY) + "]")

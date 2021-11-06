@@ -2,6 +2,7 @@ from collections import namedtuple
 from peewee import *
 
 # note that -1 is used to denote "see notes for cost"
+# CHNGED WEAPON RANGE TO ATTACK_RANGE, EDIT DB TO ACCOMODATE
 
 db = SqliteDatabase('info.db')
 
@@ -10,7 +11,8 @@ class Gear(Model):
     cost = TextField()
     description = TextField()
     # CHANGED FROM TYPE
-    category = CharField()
+    type = CharField()
+    # category = CharField()
     notes = TextField()
     class Meta:
         database = db
@@ -19,7 +21,8 @@ class Weapon(Model):
     name = CharField()
     cost = TextField()
     # CHANGED FROM TYPE
-    category = CharField() # e.g. melee, pistol
+    type = CharField()
+    # category = CharField() # e.g. melee, pistol
     weapon_accuracy = IntegerField()
     concealability = CharField()
     availability = CharField()
@@ -28,7 +31,7 @@ class Weapon(Model):
     num_shots = IntegerField()
     rate_of_fire = IntegerField()
     # the following apply to both melee and distance
-    range = CharField() # str because "throw" is a valid range, not just numbers
+    attack_range = CharField() # str because "throw" is a valid range, not just numbers
     notes = TextField() # extra info, may be empty
 
     class Meta:
@@ -60,14 +63,14 @@ class Armor(Model):
 
 db.connect()
 
-def add_gear():
-    x_type = input("Any fields can be left empty if desired.\nInput gear type: ")
-    x_name = input("Input gear name: ")
-    x_cost = float(input("Input gear cost: "))
-    x_descr = input("Input gear description: ")
-    x_notes = input("Input gear notes (extra information, if applicable): ")
-    gear = Gear.create(name=x_name, cost=x_cost, description=x_descr, type=x_type, notes=x_notes)
-    gear.save()
+# def add_gear():
+#     x_type = input("Any fields can be left empty if desired.\nInput category: ")
+#     x_name = input("Input name: ")
+#     x_cost = float(input("Input cost: "))
+#     x_descr = input("Input description: ")
+#     x_notes = input("Input notes (extra information, if applicable): ")
+#     gear = Gear.create(name=x_name, cost=x_cost, description=x_descr, category=x_categor, notes=x_notes)
+#     gear.save()
 
 def remove_gear(name: str):
     gear = Gear.get(Gear.name == name)
@@ -95,9 +98,9 @@ def add_weapon(name, cost, type_, wa, conc, avail, dmg, num_shots, rof, range, n
     w_rof = int(input("Input weapon RoF: "))
     if (w_rof == ""):
         w_rof = 0 # int
-    w_range = input("Input weapon range: ")
+    w_attack_range = input("Input weapon range: ")
     w_notes = input("Input weapon notes (extra information, if applicable): ")
-    weapon = Weapon(name=w_name, cost=w_cost, type=w_type, weapon_accuracy = w_wa, concealability=w_conc, damage=w_dmg, rate_of_fire=w_rof, range=w_range, notes=w_notes)
+    weapon = Weapon(name=w_name, cost=w_cost, type=w_type, weapon_accuracy = w_wa, concealability=w_conc, damage=w_dmg, rate_of_fire=w_rof, attack_range=w_attack_range, notes=w_notes)
     weapon.save()
 
 def remove_weapon(name: str):
@@ -119,3 +122,10 @@ def add_armor():
 
     armor = Armor(name=x_name, cost=x_cost, penalty = x_penalty, body_parts = x_parts)
     armor.save()
+
+
+# for g in Gear.select():
+#     print(g.name, g.cost, g.description, g.category, g.notes)
+
+# for g in Gear.select():
+#     print(g.name, g.cost, g.description, g.type, g.notes)

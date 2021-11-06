@@ -35,8 +35,7 @@ class NewCharacterFrame(Frame):
         self.role.insert(0, "Enter Role")
         self.role.grid(row = 2, column = 0)
 
-        # used for is_npc
-        self.is_npc = IntVar(self, value=False)
+        self.is_npc = IntVar(self, value=False) # used for is_npc
         self.chara = Radiobutton(self, **options_bw, text = "Player", font = (courier_new, 14), variable = self.is_npc, value = False, selectcolor = 'black', anchor = 'w')
         self.chara.grid(row = 3, column = 0)
         self.npc = Radiobutton(self, **options_bw, text = "NPC", font = (courier_new, 14), variable = self.is_npc, value = True, selectcolor = 'black', anchor = 'w')
@@ -101,12 +100,9 @@ class NewCharacterFrame(Frame):
         EMP_input.grid(row = 18, column = 1)
 
 
-        self.eb = DoubleVar(self, value = 0.0)
-        self.description = StringVar(self, value = "")
-        self.notes = StringVar(self, value = "")
-        # eb
-        # description
-        # notes
+        self.eb = DoubleVar(self, value = 0.0) # eb
+        self.description = StringVar(self, value = "") # description
+        self.notes = StringVar(self, value = "") # notes
         # armor
 
         self.enter_character = Button(self, **options_bw, text = "Create Character", font = (courier_new, 12), command = lambda: self.create_character())
@@ -143,16 +139,111 @@ class AllCharactersFrame(Frame):
 
         self.top_label = Label(self, text = "Characters")
         self.top_label.configure(**options_br, font = (courier_new, 16))
-        self.top_label.grid(row = 0, column = 50) # column isn't quite centering properly
+        self.top_label.grid(row = 0, column = 1) # column isn't quite centering properly
+
+        self.players_label = Label(self, text = "Players")
+        self.players_label.configure(**options_br, font = (courier_new, 15))
+        self.players_label.grid(row = 1, column = 0)
+
+        self.npcs_label = Label(self, text = "NPCs")
+        self.npcs_label.configure(**options_br, font = (courier_new, 15))
+        self.npcs_label.grid(row = 1, column = 2)
 
         # call all characters from DB
-        self.characters = []
-        for c in Character.select():
-            self.characters.append(c)
+        self.players = [] # left
+        for c in Character.select().where(Character.is_npc == 0):
+            self.players.append(c)
         
+        self.npcs = [] # right
+        for c in Character.select().where(Character.is_npc == 1):
+            self.npcs.append(c)
+        
+        playerX: int = 2 # current row; dynamically changes
+        for player in self.players:
+            self.player_handle = Label(self, text = "HANDLE: " + player.handle, justify = LEFT)
+            self.player_handle.configure(**options_bw, font = (courier_new, 14))
+            self.player_handle.grid(row = playerX, column = 0, padx = 0, pady = 0)
+
+            player_stats = deserialize_stats(player.stats) # stats object
+            self.player_stats_view = Label(self, text = \
+                                       "INT [" + str(player_stats.INT) \
+                                     + "] REF [" + str(player_stats.REF)  \
+                                     + "] TECH ["+ str(player_stats.TECH) \
+                                     + "] COOL [" + str(player_stats.COOL) \
+                                     + "] ATTR [" + str(player_stats.ATTR) \
+                                     + "]\n" \
+                                     + "LUCK [" + str(player_stats.LUCK) \
+                                     + "] MA [" + str(player_stats.MA) \
+                                     + "] BODY [" + str(player_stats.BODY) \
+                                     + "] EMP [" + str(player_stats.EMP) \
+                                     + "]" + '\n' \
+                                     + "BTM [" + str(player_stats.BTM) \
+                                     + "] SAVE [" + str(player_stats.SAVE) \
+                                     + "] Run [" + str(player_stats.run) \
+                                     + "] Leap [" + str(player_stats.leap) \
+                                     + "] Lift [" + str(player_stats.lift) \
+                                     + "] Carry [" + str(player_stats.carry) \
+                                     + "]\n" \
+                                     + "Humanity [" + str(player_stats.humanity) \
+                                     + "] Melee Modifier [" + str(player_stats.melee_modifier) \
+                                     + "]\n" \
+                                     + "Body Type: " + str(player_stats.body_type_str) \
+                                     , justify = LEFT)
+            
+            self.player_stats_view.configure(**options_bw, font = (courier_new, 12))
+            self.player_stats_view.grid(row = playerX + 1, column = 0, padx = 0, pady = 0)
+
+            playerX = playerX + 2 # advance x value
+        
+
+        npcX: int = 2 # current row; dynamically changes
+        for npc in self.npcs:
+            self.npc_handle = Label(self, text = "HANDLE: " + npc.handle, justify = RIGHT)
+            self.npc_handle.configure(**options_bw, font = (courier_new, 14))
+            self.npc_handle.grid(row = npcX, column = 2, padx = 0, pady = 0)
+
+            npc_stats = deserialize_stats(npc.stats) # stats object
+            self.npc_stats_view = Label(self, text = \
+                                       "INT [" + str(npc_stats.INT) \
+                                     + "] REF [" + str(npc_stats.REF)  \
+                                     + "] TECH ["+ str(npc_stats.TECH) \
+                                     + "] COOL [" + str(npc_stats.COOL) \
+                                     + "] ATTR [" + str(npc_stats.ATTR) \
+                                     + "]\n" \
+                                     + "LUCK [" + str(npc_stats.LUCK) \
+                                     + "] MA [" + str(npc_stats.MA) \
+                                     + "] BODY [" + str(npc_stats.BODY) \
+                                     + "] EMP [" + str(npc_stats.EMP) \
+                                     + "]" + '\n' \
+                                     + "BTM [" + str(npc_stats.BTM) \
+                                     + "] SAVE [" + str(npc_stats.SAVE) \
+                                     + "] Run [" + str(npc_stats.run) \
+                                     + "] Leap [" + str(npc_stats.leap) \
+                                     + "] Lift [" + str(npc_stats.lift) \
+                                     + "] Carry [" + str(npc_stats.carry) \
+                                     + "]\n" \
+                                     + "Humanity [" + str(npc_stats.humanity) \
+                                     + "] Melee Modifier [" + str(npc_stats.melee_modifier) \
+                                     + "]\n" \
+                                     + "Body Type: " + str(npc_stats.body_type_str) \
+                                     , anchor = 'w' \
+                                     , justify = LEFT)
+            
+            self.npc_stats_view.configure(**options_bw, font = (courier_new, 12))
+            self.npc_stats_view.grid(row = npcX + 1, column = 2, padx = 0, pady = 0)
+
+            npcX = npcX + 2 # advance x value
+
+        # self.handle = Entry(self, **options_bw, width = 15, font = (courier_new, 14), justify = 'center')
+        # self.handle.insert(0, "Enter Handle")
+        # self.handle.grid(row = 1, column = 0, padx = 20)
+
+
         # for each character, set up a box for name/stats/HP/SP, as in the official character sheets
         # also add a delete character button, which brings up a warning screen, then deletes if users hit continue
         # and an add character button that redirects to the new characters frame
+
+
 
 class PlayersFrame(Frame):
     def __init__(self, container):
@@ -190,8 +281,10 @@ class NPCsFrame(Frame):
         
         # for each character, set up a box for name/stats/HP/SP, as in the official character sheets
         # also add a delete character button, which brings up a warning screen, then deletes if users hit continue
-        # and an add character button that redirects to the new characters frame
+        # and a new character button that redirects to the new characters frame
 
+        self.new_character = Button(self, **options_bw, text = "New Character", font = (courier_new, 12), command = lambda: App.show_frame(App, NewCharacterFrame))
+        self.new_character.grid(row = 10, column = 1)
 
 
 class CreateWeaponFrame(Frame):
