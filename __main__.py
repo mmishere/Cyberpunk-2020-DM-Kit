@@ -170,33 +170,8 @@ class AllCharactersFrame(Frame):
             self.player_handle.configure(**options_bw, font = (courier_new, 14))
             self.player_handle.grid(row = playerX, column = 0, padx = 0, pady = 0)
 
-            # player_stats = deserialize_stats(player.stats) # stats object
             player_stats: str = stats_to_string(player)
             self.player_stats_view = Label(self, text = player_stats, anchor = 'w', justify = LEFT)
-            # self.player_stats_view = Label(self, text = \
-            #                            "INT [" + str(player_stats.INT) \
-            #                          + "] REF [" + str(player_stats.REF)  \
-            #                          + "] TECH ["+ str(player_stats.TECH) \
-            #                          + "] COOL [" + str(player_stats.COOL) \
-            #                          + "] ATTR [" + str(player_stats.ATTR) \
-            #                          + "]\n" \
-            #                          + "LUCK [" + str(player_stats.LUCK) \
-            #                          + "] MA [" + str(player_stats.MA) \
-            #                          + "] BODY [" + str(player_stats.BODY) \
-            #                          + "] EMP [" + str(player_stats.EMP) \
-            #                          + "]" + '\n' \
-            #                          + "BTM [" + str(player_stats.BTM) \
-            #                          + "] SAVE [" + str(player_stats.SAVE) \
-            #                          + "] Run [" + str(player_stats.run) \
-            #                          + "] Leap [" + str(player_stats.leap) \
-            #                          + "] Lift [" + str(player_stats.lift) \
-            #                          + "] Carry [" + str(player_stats.carry) \
-            #                          + "]\n" \
-            #                          + "Humanity [" + str(player_stats.humanity) \
-            #                          + "] Melee Modifier [" + str(player_stats.melee_modifier) \
-            #                          + "]\n" \
-            #                          + "Body Type: " + str(player_stats.body_type_str) \
-            #                          , justify = LEFT)
             
             self.player_stats_view.configure(**options_bw, font = (courier_new, 12))
             self.player_stats_view.grid(row = playerX + 1, column = 0, padx = 0, pady = 0)
@@ -210,45 +185,14 @@ class AllCharactersFrame(Frame):
             self.npc_handle.configure(**options_bw, font = (courier_new, 14))
             self.npc_handle.grid(row = npcX, column = 2, padx = 0, pady = 0)
 
-            # npc_stats = deserialize_stats(npc.stats) # stats object
             npc_stats = stats_to_string(npc) # string of stats
             self.npc_stats_view = Label(self, text = npc_stats, anchor = 'w', justify = LEFT)
-                                    #    "INT [" + str(npc_stats.INT) \
-                                    #  + "] REF [" + str(npc_stats.REF)  \
-                                    #  + "] TECH ["+ str(npc_stats.TECH) \
-                                    #  + "] COOL [" + str(npc_stats.COOL) \
-                                    #  + "] ATTR [" + str(npc_stats.ATTR) \
-                                    #  + "]\n" \
-                                    #  + "LUCK [" + str(npc_stats.LUCK) \
-                                    #  + "] MA [" + str(npc_stats.MA) \
-                                    #  + "] BODY [" + str(npc_stats.BODY) \
-                                    #  + "] EMP [" + str(npc_stats.EMP) \
-                                    #  + "]" + '\n' \
-                                    #  + "BTM [" + str(npc_stats.BTM) \
-                                    #  + "] SAVE [" + str(npc_stats.SAVE) \
-                                    #  + "] Run [" + str(npc_stats.run) \
-                                    #  + "] Leap [" + str(npc_stats.leap) \
-                                    #  + "] Lift [" + str(npc_stats.lift) \
-                                    #  + "] Carry [" + str(npc_stats.carry) \
-                                    #  + "]\n" \
-                                    #  + "Humanity [" + str(npc_stats.humanity) \
-                                    #  + "] Melee Modifier [" + str(npc_stats.melee_modifier) \
-                                    #  + "]\n" \
-                                    #  + "Body Type: " + str(npc_stats.body_type_str) \
-                                    #  , anchor = 'w' \
-                                    #  , justify = LEFT)
             
             self.npc_stats_view.configure(**options_bw, font = (courier_new, 12))
             self.npc_stats_view.grid(row = npcX + 1, column = 2, padx = 0, pady = 0)
 
             npcX = npcX + 2 # advance x value
 
-        # self.handle = Entry(self, **options_bw, width = 15, font = (courier_new, 14), justify = 'center')
-        # self.handle.insert(0, "Enter Handle")
-        # self.handle.grid(row = 1, column = 0, padx = 20)
-
-
-        # for each character, set up a box for name/stats/HP/SP, as in the official character sheets
         # also add a delete character button, which brings up a warning screen, then deletes if users hit continue
         # and an add character button that redirects to the new characters frame
 

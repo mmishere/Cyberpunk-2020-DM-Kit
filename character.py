@@ -37,12 +37,11 @@ def stats_to_string(character: Character) -> str:
     stats_ = deserialize_stats(character.stats)
     # this looks a bit off if there are any two-digit stat values, but whatever for now
     
-    # print(f"STATS for {character.handle}:")
     liftAsLbs: int = int(stats_.lift * 2.20462)
     carryAsLbs: int = int(stats_.carry * 2.20462)
 
     return f"""
-        {character.handle}:
+        {character.handle}
         INT  [{stats_.INT}] REF [{stats_.REF}] TECH [{stats_.TECH}] COOL [{stats_.COOL}]
         ATTR [{stats_.ATTR}] LUCK [{stats_.LUCK}] MA [{stats_.MA}] BODY [{stats_.BODY}]
         EMP  [{stats_.EMP}] Humanity [{stats_.humanity}]
