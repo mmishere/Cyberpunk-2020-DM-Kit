@@ -141,12 +141,7 @@ class Stats:
             self.BTM = -5
 
 def serialize_stats(stats: Stats) -> str:
-    # return json.dumps(stats, default=lambda o: o.__dict__)
     return jsonpickle.encode(stats)
 
 def deserialize_stats(stats: str) -> Stats:
-    # return json.loads(stats)
     return jsonpickle.decode(stats)
-
-# def toJson(self):
-#     return json.dumps(stats, default=lambda o: o.__dict__)

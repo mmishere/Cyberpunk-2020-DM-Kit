@@ -2,6 +2,7 @@ from character_stats import *
 from character_armor import *
 from items import *    
 
+# is this what character_armor is doing???
 IntrinsicArmor = namedtuple("IntrinsicArmor", "head torso left_arm right_arm left_leg right_leg")
 # use True and False to show whether the armor covers a given area
 # or numbers? idk
@@ -29,17 +30,27 @@ class Character(Model):
 # Character.drop_table()
 # Character.create_table()
 
-def stats_to_string(character: Character):
+
+# fstrings
+def stats_to_string(character: Character) -> str:
     # deserialize the stats:
     stats_ = deserialize_stats(character.stats)
     # this looks a bit off if there are any two-digit stat values, but whatever for now
-    print("STATS for " + character.handle + ":")
-    print("  INT  [" + str(stats_.INT) + "]  REF [" + str(stats_.REF) + "] TECH [" + str(stats_.TECH) + "] COOL [" + str(stats_.COOL) + "]")
-    print("  ATTR [" + str(stats_.ATTR) + "] LUCK [" + str(stats_.LUCK) + "]   MA [" + str(stats_.MA) + "] BODY [" + str(stats_.BODY) + "]")
-    print("  EMP  [" + str(stats_.EMP) + "] Humanity [" + str(stats_.humanity) + "]")
-    print("  Run  [" + str(stats_.run) + "m] Leap [" + str(stats_.leap) + "m]")
-    print("  Lift [" + str(stats_.lift) + "kgs / " + str(int(stats_.lift * 2.20462)) + "lbs] Carry [" + str(stats_.carry) + "kgs / " + str(int(stats_.carry * 2.20462)) + "lbs]")
-    print("  SAVE [" + str(stats_.SAVE) + "] BTM [" + str(stats_.BTM) + "] Melee Modifier [" + str(stats_.melee_modifier) + "], " + stats_.body_type_str)
+    
+    # print(f"STATS for {character.handle}:")
+    liftAsLbs: int = int(stats_.lift * 2.20462)
+    carryAsLbs: int = int(stats_.carry * 2.20462)
+
+    return f"""
+        {character.handle}:
+        INT  [{stats_.INT}] REF [{stats_.REF}] TECH [{stats_.TECH}] COOL [{stats_.COOL}]
+        ATTR [{stats_.ATTR}] LUCK [{stats_.LUCK}] MA [{stats_.MA}] BODY [{stats_.BODY}]
+        EMP  [{stats_.EMP}] Humanity [{stats_.humanity}]
+        Run  [{stats_.run}m] Leap [{stats_.leap}m]
+        Lift [{stats_.lift}kgs / {liftAsLbs}lbs] Carry [{stats_.carry}kgs / {carryAsLbs}lbs]
+        SAVE [{stats_.SAVE}] BTM [{stats_.BTM}] Melee Modifier [{stats_.melee_modifier}], {stats_.body_type_str}
+    """
+    
 
 print("PRINTING ALL CHARACTERS:")
 for g in Character.select():

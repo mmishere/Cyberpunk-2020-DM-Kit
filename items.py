@@ -72,9 +72,9 @@ db.connect()
 #     gear = Gear.create(name=x_name, cost=x_cost, description=x_descr, category=x_categor, notes=x_notes)
 #     gear.save()
 
-def remove_gear(name: str):
-    gear = Gear.get(Gear.name == name)
-    gear.delete_instance()
+# def remove_gear(name: str):
+#     gear = Gear.get(Gear.name == name)
+#     gear.delete_instance()
 
 
 # lets user add their own weapon
