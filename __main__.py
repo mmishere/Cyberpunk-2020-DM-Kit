@@ -177,7 +177,7 @@ class AllCharactersFrame(Frame):
             self.player_stats_view.grid(row = playerX + 1, column = 0, padx = 0, pady = 0)
 
             playerX = playerX + 2 # advance x value
-        
+
 
         npcX: int = 2 # current row; dynamically changes
         for npc in self.npcs:
@@ -216,6 +216,7 @@ class PlayersFrame(Frame):
         # for each character, set up a box for name/stats/HP/SP, as in the official character sheets
         # also add a delete character button, which brings up a warning screen, then deletes if users hit continue
         # and an add character button that redirects to the new characters frame
+
 
 class NPCsFrame(Frame):
     def __init__(self, container):
@@ -271,7 +272,7 @@ class CreateWeaponFrame(Frame):
         WA_input = Entry(self, textvariable = self.WA, width = 2, **options_bw, font = (courier_new, 14))
         WA_label.grid(row = 3, column = 0)
         WA_input.grid(row = 3, column = 1)
-        
+
 
 
         self.cost = DoubleVar(self, value = 0)
@@ -334,7 +335,7 @@ class CreateWeaponFrame(Frame):
 
         self.enter_weapon = Button(self, **options_bw, text = "Create Weapon", font = (courier_new, 12), command = lambda: self.create_weapon())
         self.enter_weapon.grid(row = 50, column = 0)
-    
+
     def create_weapon():
         add_weapon(self.name, self.cost, self.type, self.WA, self.concealability, self.availability, self.damage, self.num_shots, self.rate_of_fire, self.range, self.notes)
 
@@ -353,12 +354,12 @@ class App(Tk):
             frame = fr(self)
             self.frames[fr] = frame
             frame.grid(row = 0, column = 0, sticky = "nsew") # packing is done here
-        
+
         self.show_frame(MainFrame)
 
 
         self.menu_bar = Menu(self)
-        
+
         # i tried to abstract this bit into a function and it didn't work, so :')
         self.menu_bar.add_command(label = "Main Menu", command = lambda: self.show_frame(MainFrame))
         character_menu = Menu(self.menu_bar, tearoff = 0)

@@ -33,9 +33,45 @@ class Stats:
         self.SAVE = b
         self.run = m * 3
         self.leap = (m * 3) / 4
-        self.lift = b * 40
-        self.carry = b * 10
+        self.lift = b * 40 # kgs
+        self.carry = b * 10 # kgs
         self.humanity = e * 10
+
+
+        # match self.BODY:
+        #     case (0|1|2):
+        #         self.melee_modifier = -2
+        #         self.body_type_str = "Very weak"
+        #         self.BTM = 0
+        #     case (3|4):
+        #         self.melee_modifier = -1
+        #         self.body_type_str = "Weak"
+        #         self.BTM = -1
+        #     case (5|6|7):
+        #         self.melee_modifier = 0
+        #         self.body_type_str = "Average"
+        #         self.BTM = -2
+        #     case (8|9):
+        #         self.melee_modifier = 1
+        #         self.body_type_str = "Strong"
+        #         self.BTM = -3
+        #     case 10:
+        #         self.melee_modifier = 2
+        #         self.body_type_str = "Very strong"
+        #         self.BTM = -4
+        #     # after this, the only thing that changes is melee_modifier: see friday night firefight melee section for details
+        #     case (11|12):
+        #         self.melee_modifier = 4
+        #         self.body_type_str = "Superhuman"
+        #         self.BTM = -5
+        #     case (13|14):
+        #         self.melee_modifier = 6
+        #         self.body_type_str = "Superhuman"
+        #         self.BTM = -5
+        #     case _: # >= 15:
+        #         self.melee_modifier = 8
+        #         self.body_type_str = "Superhuman"
+        #         self.BTM = -5
 
         if (self.BODY <= 2):
             self.melee_modifier = -2

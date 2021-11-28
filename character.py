@@ -41,13 +41,13 @@ def stats_to_string(character: Character) -> str:
     carryAsLbs: int = int(stats_.carry * 2.20462)
 
     return f"""
-        {character.handle}
-        INT  [{stats_.INT}] REF [{stats_.REF}] TECH [{stats_.TECH}] COOL [{stats_.COOL}]
-        ATTR [{stats_.ATTR}] LUCK [{stats_.LUCK}] MA [{stats_.MA}] BODY [{stats_.BODY}]
-        EMP  [{stats_.EMP}] Humanity [{stats_.humanity}]
-        Run  [{stats_.run}m] Leap [{stats_.leap}m]
-        Lift [{stats_.lift}kgs / {liftAsLbs}lbs] Carry [{stats_.carry}kgs / {carryAsLbs}lbs]
-        SAVE [{stats_.SAVE}] BTM [{stats_.BTM}] Melee Modifier [{stats_.melee_modifier}], {stats_.body_type_str}
+    {character.handle}
+    INT  [{stats_.INT}]  REF [{stats_.REF}] TECH [{stats_.TECH}] COOL [{stats_.COOL}]
+    ATTR [{stats_.ATTR}] LUCK [{stats_.LUCK}]   MA [{stats_.MA}] BODY [{stats_.BODY}]
+    EMP  [{stats_.EMP}] Humanity [{stats_.humanity}]
+    Run  [{stats_.run}m] Leap [{stats_.leap}m]
+    Lift [{stats_.lift}kgs / {liftAsLbs}lbs] Carry [{stats_.carry}kgs / {carryAsLbs}lbs]
+    SAVE [{stats_.SAVE}] BTM [{stats_.BTM}] Melee Modifier [{stats_.melee_modifier}], {stats_.body_type_str}
     """
     
 
